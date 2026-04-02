@@ -18,6 +18,10 @@ The global transition to electric vehicles and grid-scale energy storage has cre
 
 **CathodeAI addresses this** by combining the Materials Project DFT database with machine learning, multi-objective Pareto optimization, and industry-relevant scoring to identify and rank cathode candidates — reducing thousands of candidates to a prioritized shortlist in seconds.
 
+## Visualizations
+
+![Battery Animation](cathodeai_battery_animation.gif)
+
 ---
 
 ## Key Discoveries
@@ -39,6 +43,8 @@ The Pareto analysis proved definitively that LiCuO₂ (optimal for high-performa
 **5. For grid storage, one material dominates all others**  
 Li₁.₂Ti(PO₃)₅ was the only material on the Pareto frontier for both thermal safety AND cycle life simultaneously. Every other candidate was dominated on at least one objective.
 
+![CathodeAI Screening Pipeline](cathodeai_screening_pipeline.gif)
+
 ---
 
 ## Methodology
@@ -59,6 +65,8 @@ Materials Project DFT database — 2,774 Li insertion electrode entries queried 
 | 7 | Thermal safety scoring | Runaway onset temperature |
 | 8 | Cycle life prediction | EV target: 1000+ cycles |
 
+![CathodeAI Screening Pipeline](cathodeai_screening_pipeline.gif)
+
 ### Machine Learning Layer
 
 Four models compared via 5-fold cross-validation:
@@ -69,6 +77,10 @@ Four models compared via 5-fold cross-validation:
 | **Random Forest** | **0.8613** | **0.0212** | **232.82** |
 | XGBoost | 0.8445 | 0.0217 | 250.76 |
 | Neural Network | 0.8196 | 0.0222 | 282.17 |
+
+![Model Comparison](ml_model_comparison.png)
+
+![Error Analysis](ml_error_analysis.png)
 
 **Random Forest selected** — best generalization, lowest variance across folds, interpretable feature importances.
 
@@ -88,6 +100,8 @@ Three Pareto analyses conducted:
 - **EV application:** Energy Density vs Cycle Life → 12 Pareto-optimal materials
 - **Consumer electronics:** Energy Density vs Cost → application-specific frontier
 - **Grid storage:** Thermal Safety vs Cycle Life → 1 dominant material (Li₁.₂Ti(PO₃)₅)
+
+  ![Pareto Frontier](cathodeai_pareto_frontier.png)
 
 ### Novel Composition Generator
 
@@ -123,6 +137,8 @@ The trained ML model is applied to 42 hypothetical compositions not present in t
 | 8 | Li₀.₂Mn₃CuO₈ | 4.251 | 2589 | $8 | 732 | 0.70 |
 | 9 | Li₀.₁CuPO₄ | 4.134 | 2546 | $12 | 639 | 0.90 |
 | 10 | Li₁.₅Mn₂(PO₄)₃ | 3.862 | 2814 | $8 | 1156 | 0.85 |
+
+![CathodeAI Complete Analysis](cathodeai_complete_analysis.png)
 
 ### Application-Specific Recommendations
 
@@ -180,6 +196,8 @@ Available presets:
 | Tesla Cell Engineering | Performance + Cost | 4680 cell optimization |
 | QuantumScape / Solid Power | Solid State Layer | Sulfide electrolyte compatibility |
 | Northvolt / CATL | Full pipeline | GWh-scale material selection |
+
+![Cost Analysis](cathodeai_cost_analysis.png)
 
 ---
 
