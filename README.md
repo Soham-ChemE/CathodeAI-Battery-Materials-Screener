@@ -209,6 +209,8 @@ Available presets:
 | LiFePO₄ (LFP) | ✅ Grid storage | Tesla standard range |
 | LiNiO₂ | ✅ Novel prediction | Cobalt-free research target |
 
+> 📂 Interactive 3D visualization and dashboard available as HTML files in the repository — download and open in browser for full interactivity.
+
 ---
 
 ## Contact
