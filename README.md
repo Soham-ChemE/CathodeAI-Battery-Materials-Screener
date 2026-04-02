@@ -43,7 +43,6 @@ The Pareto analysis proved definitively that LiCuO₂ (optimal for high-performa
 **5. For grid storage, one material dominates all others**  
 Li₁.₂Ti(PO₃)₅ was the only material on the Pareto frontier for both thermal safety AND cycle life simultaneously. Every other candidate was dominated on at least one objective.
 
-![CathodeAI Screening Pipeline](cathodeai_screening_pipeline.gif)
 
 ---
 
