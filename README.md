@@ -211,6 +211,13 @@ Available presets:
 
 ---
 
+## Interactive Visualizations
+
+> These visualizations require downloading and opening in a browser.
+
+- 🔋 [3D Battery Cathode Discovery Space](cathodeai_3d_discovery_space.html) — Fully rotatable 3D scatter plot. X: Voltage | Y: Capacity | Z: Energy Density. Hover for material details.
+- 📊 [Interactive Dashboard](cathodeai_interactive_dashboard.html) — Multi-panel dashboard with hover tooltips across all scoring layers.
+
 ## Contact
 
 **Soham Kavathekar**  
