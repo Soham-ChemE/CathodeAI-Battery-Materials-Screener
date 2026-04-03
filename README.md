@@ -1,3 +1,6 @@
+# CathodeAI - Battery Materials Screener
+[![Open in nbviewer](https://img.shields.io/badge/Jupyter-Open%20in%20nbviewer-orange)](https://nbviewer.org/github/Soham-ChemE/CathodeAI-Battery-Materials-Screener/blob/main/CathodeAI.ipynb)
+
 # CathodeAI — Computational Discovery Engine for Li-ion Battery Cathode Materials
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://python.org)
