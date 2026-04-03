@@ -1,5 +1,4 @@
 # CathodeAI - Battery Materials Screener
-[![Open in nbviewer](https://img.shields.io/badge/Jupyter-Open%20in%20nbviewer-orange)](https://nbviewer.org/github/Soham-ChemE/CathodeAI-Battery-Materials-Screener/blob/main/CathodeAI.ipynb)
 
 # CathodeAI — Computational Discovery Engine for Li-ion Battery Cathode Materials
 
@@ -7,7 +6,7 @@
 [![Materials Project](https://img.shields.io/badge/Data-Materials%20Project-green)](https://materialsproject.org)
 [![ML](https://img.shields.io/badge/ML-Random%20Forest%20|%20XGBoost%20|%20NN-orange)](https://scikit-learn.org)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
-
+[![Open in nbviewer](https://img.shields.io/badge/Jupyter-Open%20in%20nbviewer-orange)](https://nbviewer.org/github/Soham-ChemE/CathodeAI-Battery-Materials-Screener/blob/main/CathodeAI.ipynb)
 **Author:** Soham Kavathekar | MS Chemical & Biomolecular Engineering, University of Pennsylvania  
 **Contact:** stg3719@seas.upenn.edu | [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-72a22b246)
 
