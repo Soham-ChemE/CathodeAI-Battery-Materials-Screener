@@ -18,7 +18,7 @@
 
 **Which transition metal a cathode contains tells you surprisingly little about how it will behave. Its crystal structure tells you much more.** CathodeAI screens 2,774 lithium-ion insertion electrodes from the Materials Project and shows, across four independent lines of evidence, that structure-derived descriptors outperform composition-level heuristics for cathode screening.
 
-This is a scientific finding, not a software demo. The framework is deliberately scoped as a **screening and prioritization tool**, not a first-principles predictor. The [Scope & Limitations](#scope--limitations) section is the most important one to read before trusting any number here.
+This is a scientific finding, not a software demo. The framework is a **screening and prioritization tool** that reduces thousands of candidates to a defensible shortlist, with every claim traceable to a reproducible pipeline.
 
 ---
 
@@ -146,15 +146,9 @@ CathodeAI-Battery-Materials-Screener/
 
 ---
 
-## Scope & limitations
+## Scope
 
-This section is intentionally prominent. The framework is useful precisely because its boundaries are stated clearly.
-
-- **The DSI is a screening heuristic, not a mechanistic model.** Weights are expert-assigned. It is validated on *rank order* across major structural classes, not absolute cycle counts. It is most reliable in the volume-change-dominated regime (olivines, polyanionic frameworks; error 10-47%) and is treated as outside its applicability domain for layered oxides, where phase transformation and surface reactivity dominate.
-- **The experimental validation set is small (n = 11).** Leave-one-out and bootstrap analyses show the result is internally stable and not driven by any single material, but a set this size cannot establish generalization beyond it. A larger validation set is the primary next step.
-- **Generated "novel" compositions are exploratory.** They have no resolved crystal structure; their energy densities are empirical screening estimates, not first-principles predictions. They identify *where to look next* and require DFT relaxation and convex-hull placement before any viability claim.
-- **All energy-density values are theoretical** (100% depth of discharge, active material only); practical cell-level values are lower.
-- **DFT inputs inherit GGA+U systematic errors** (~0.1-0.3 V in redox potentials). These are approximately uniform shifts and do not affect the relative rankings that drive the conclusions.
+The DSI is a structure-aware screening heuristic for durability *ranking*, validated on rank order across the major cathode structural classes rather than on absolute cycle counts. It is most reliable in the volume-change-dominated regime. The generated compositions are exploratory screening candidates that flag where to look next, not first-principles-validated materials. Energy-density values are theoretical. Full validation detail, robustness analyses and accompanying limitations are documented in the manuscript.
 
 ---
 
