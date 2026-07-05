@@ -20,6 +20,10 @@ Its central finding is a scientific one, not a software one:
 
 Everything in this repository is built to support, test and quantify that claim. The framework is deliberately scoped as a **screening and prioritization tool**, not a first-principles predictor. See [Scope & Limitations](#scope--limitations), which is the most important section to read before drawing conclusions from any number here.
 
+![Feature set comparison](cathodeai_feature_engineering.png)
+
+*Structure-informed features (8) reach R² = 0.942 for energy-density prediction, outperforming 83 purely compositional descriptors (R² = 0.413).*
+
 ---
 
 ## The four lines of evidence
@@ -61,7 +65,7 @@ Model comparison on the combined 8-feature set (5-fold CV):
 | XGBoost | 0.945 | 0.046 | 104.28 |
 | Neural Network | 0.976 | 0.010 | 84.46 |
 
-> **Note on model choice (this is deliberate, not an oversight).** The neural network attains the highest cross-validation R². Random Forest was nonetheless selected as the production model because its native, well-calibrated impurity importances and exact TreeSHAP attribution are essential to the interpretability analysis at the core of this work and the accuracy gap (0.034 in R²) is small relative to prediction uncertainty. Held-out test-set performance for the final model: **R² = 0.966, MAE = 92.9 Wh/L (single held-out split)**.
+> **Note on model choice (this is deliberate, not an oversight).** The neural network attains the highest cross-validation R². Random Forest was nonetheless selected as the production model because its native, well-calibrated impurity importances and exact TreeSHAP attribution are essential to the interpretability analysis at the core of this work, and the accuracy gap (0.034 in R²) is small relative to prediction uncertainty. Held-out test-set performance for the final model: **R² = 0.966, MAE = 92.9 Wh/L (single held-out split)**.
 
 **Interpretability (SHAP, final model)**
 
@@ -108,12 +112,14 @@ Capacity dominates energy-density prediction (mean |SHAP| = 602 Wh/L; Random For
 ### The Degradation Screening Index (DSI)
 
 A transparent composite of three structure-derived descriptors, each tied to an independent degradation pathway:
-
-```
 DSI = 0.50·S_strain + 0.35·S_stability + 0.15·S_bandgap + 0.10·1_phosphate   (capped at 1.0)
-```
+
 
 The descriptor **weights are expert-assigned, not learned**. The DSI is presented honestly as a structurally-grounded *screening heuristic*, whose advantage over composition-based heuristics is that it operates on structure-resolved state variables. Its value is demonstrated empirically (improved rank-order agreement with experiment), not asserted mechanistically. Normalization bounds are fixed on the 2,774-material training distribution, independent of the 11-material validation set.
+
+![DSI validation](cathodeai_expanded_validation.png)
+
+*The multi-descriptor DSI (Spearman ρ = 0.760) ranks experimental cycle life across 11 cathodes better than a single volume-strain descriptor (ρ = 0.549).*
 
 ### Novel-composition generator (exploratory)
 
@@ -122,16 +128,13 @@ A charge-balance enumeration over transition metals, oxidation states and Li con
 ---
 
 ## Repository structure
-
-```
 CathodeAI-Battery-Materials-Screener/
 ├── README.md
 ├── LICENSE
 ├── requirements.txt
 ├── CathodeAI_complete_pipeline.py      # Full 53-section pipeline (Colab-ready)
-├── figures/                            # Generated figures
-└── cathodeai_novel_predictions.csv     # 42 generated candidate compositions
-```
+├── CathodeAI_complete_clean.ipynb      # Notebook with rendered outputs
+└── cathodeai_*.png                     # Generated figures
 
 ---
 
@@ -165,7 +168,7 @@ This section is intentionally prominent. The framework is useful precisely becau
 
 ## Related work
 
-A manuscript describing this framework in full (including the complete Degradation Screening Index validation, bootstrap and leave-one-out analyses and the heuristic-invalidation result) is in preparation. This repository contains the complete, runnable pipeline behind it.
+A manuscript describing this framework in full, including the complete Degradation Screening Index validation, bootstrap and leave-one-out analyses and the heuristic-invalidation result, is in preparation. This repository contains the complete, runnable pipeline behind it.
 
 ---
 
@@ -176,3 +179,12 @@ MIT. See [LICENSE](LICENSE).
 ## Acknowledgements
 
 Built on the open-access [Materials Project](https://materialsproject.org) DFT database (Lawrence Berkeley National Laboratory). Descriptor generation uses [matminer](https://hackingmaterials.lbl.gov/matminer/); interpretability uses [SHAP](https://github.com/shap/shap).
+
+
+
+
+
+
+
+
+
