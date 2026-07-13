@@ -1,0 +1,117 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+\title{Electronic Supplementary Information\\
+\large Beyond heuristics: structure-aware screening reveals the limits of
+composition-based cathode design}
+\author{Soham Kavathekar}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent This Electronic Supplementary Information (ESI) accompanies the
+main manuscript and provides two items referenced in the text: (S1) complete
+literature sources for the Degradation Screening Index (DSI) experimental
+validation set, and (S2) definitions of the auxiliary composite scoring
+functions used throughout the screening pipeline.
+
+\vspace{1em}
+
+% ----- ESI TABLE S1 -----
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Table S1.} Complete DSI descriptor values and literature
+sources for the 11 DSI experimental validation materials. $\Delta V/V$ is the
+volumetric change upon delithiation; $E_\mathrm{hull}$ is the energy above
+hull of the charged (delithiated) phase from Materials Project GGA+U
+calculations; $E_g$ is the electronic band gap. Cycle-life figures are
+representative order-of-magnitude values for each chemistry under typical
+cycling conditions and vary with electrode loading, voltage window, depth of
+discharge, and temperature; the DSI is validated against the \emph{rank
+ordering} of these values (Spearman $\rho$), not their absolute magnitudes.
+Band-gap and energy-above-hull values for the NMC compositions reflect
+Materials Project GGA+U trends for representative ordered structures rather
+than specific experimental measurements.}
+\label{tab:s1_sources}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l c c c c c l}
+\hline
+\textbf{Material} & \textbf{Exp.\ cycles} & \textbf{$\Delta V/V$ (\%)} &
+\textbf{$E_\mathrm{hull}$ (eV)} & \textbf{$E_g$ (eV)} & \textbf{PO\textsubscript{4}} &
+\textbf{Source} \\
+\hline
+LiCoO\textsubscript{2}      & 500    & 2.0  & 0.02 & 0.00 & No  & Mizushima 1980; Reimers 1992 \\
+LiFePO\textsubscript{4}     & 2000   & 6.81 & 0.00 & 3.59 & Yes & Padhi 1997 \\
+LiMnO\textsubscript{2}      & 300    & 16.0 & 0.05 & 0.00 & No  & Armstrong 1996 \\
+NMC111                      & 1000   & 2.5  & 0.03 & 1.50 & No  & Jung 2017 \\
+NMC622                      & 800    & 4.0  & 0.04 & 1.20 & No  & Jung 2017; Liu 2015 \\
+NMC811                      & 800    & 4.0  & 0.06 & 0.80 & No  & Liu 2015 \\
+NCA                         & 500    & 5.0  & 0.08 & 0.70 & No  & Watanabe 2014 \\
+LNMO                        & 1000   & 2.5  & 0.02 & 2.00 & No  & Zhong 1997 \\
+LTO                         & 10000  & 0.1  & 0.00 & 2.72 & No  & Ohzuku 1995 \\
+LiFeMnPO\textsubscript{4}   & 1500   & 5.0  & 0.00 & 3.50 & Yes & Padhi 1997 \\
+Li\textsubscript{2}MnO\textsubscript{3} & 200 & 8.0 & 0.10 & 1.32 & No & Kalyani 1999 \\
+\hline
+\end{tabular}
+
+\vspace{0.5em}
+\noindent\footnotesize
+Cited sources correspond to the correspondingly named entries in the
+main-manuscript bibliography and are the canonical primary or
+characterization references for each chemistry. For NCA, Watanabe
+\textit{et al.} report capacity retention under calendar and cycling
+storage tests rather than a single cycles-to-failure figure; for
+Li$_2$MnO$_3$, Kalyani \textit{et al.} report stable cycling for
+approximately 15 cycles, well below the tabulated 200. Both entries are
+retained as the closest identified primary characterization sources for
+their respective materials; the tabulated cycle-life values are
+representative order-of-magnitude figures for the chemistry class, and
+the DSI is validated against their \emph{rank order} across the 11
+materials (Spearman $\rho$), not their absolute magnitudes, consistent
+with the framing in the main text.
+\normalsize
+\end{table}
+
+\vspace{1em}
+
+% ----- ESI TABLE S2 -----
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Table S2.} Auxiliary composite scoring functions used in the
+screening pipeline, in addition to the Degradation Screening Index (DSI)
+defined in the main text (eqn~(1)). Within each composite score the component
+weights sum to unity.}
+\label{tab:s2_scores}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{3.2cm} p{4.4cm} p{6.6cm}}
+\hline
+\textbf{Composite Score} & \textbf{Components (Weights)} & \textbf{Definition} \\
+\hline
+Performance Score &
+Voltage (0.30), Energy density (0.30), Capacity (0.25), Stability (0.15) &
+Initial electrochemical ranking; voltage scored optimal in the 3.5--4.5~V
+window \\[4pt]
+CathodeAI Score &
+Performance (0.50), Supply chain (0.25), Recyclability (0.25) &
+Performance normalized to its maximum; supply chain and recyclability scored
+on $[0,1]$ \\[4pt]
+CathodeAI Economic Score &
+Performance (0.35), Supply chain (0.20), Recyclability (0.20), Solid state
+(0.15), Cost (0.10) &
+Full multi-objective score including raw-material cost; used to generate
+Table~10 (top-ranked candidates) in the main text \\[4pt]
+Novel Score &
+Predicted energy density (0.40), Supply chain (0.20), Recyclability (0.20),
+Solid state (0.20) &
+Applied to the 42 generated compositions; predicted energy density from the
+trained 8-feature Random Forest model \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}
