@@ -154,7 +154,7 @@ The DSI is a structure-aware screening heuristic for durability *ranking*, valid
 
 ## Related work
 
-A manuscript describing this framework in full, including the complete DSI validation, bootstrap and leave-one-out analyses and the heuristic-invalidation result, is in preparation. This repository contains the complete, runnable pipeline behind it.
+A manuscript describing this framework in full, including the complete DSI validation, bootstrap and leave-one-out analyses and the heuristic-invalidation result, is prepared for submission to *Journal of Materials Chemistry A* (Royal Society of Chemistry). The Electronic Supplementary Information (`esi_main.tex`) and reference list (`rsc.bib`) are included in this repository; the main manuscript will be linked here once posted as a preprint.
 
 ## License
 
