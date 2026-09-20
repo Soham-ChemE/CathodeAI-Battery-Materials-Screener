@@ -3788,7 +3788,7 @@ from mp_api.client import MPRester
 novel = ["LiCu2O3", "LiTi2O5", "LiVO4", "LiTiO3",
          "LiMn2O5", "LiCoO3", "LiNi2O5", "LiV2O6"]
 
-with MPRester("hd4bpuOuAMQrGaBhkTYCn26X2QmmXdbJ") as mpr:
+with MPRester(API_KEY) as mpr:
     for f in novel:
         docs = mpr.materials.summary.search(
             formula=f, fields=["material_id", "formula_pretty"])

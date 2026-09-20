@@ -1,0 +1,415 @@
+{
+ "Li2FeO2": {
+  "in_db": true,
+  "n_entries": 4,
+  "min_ehull_meV": 2.024537500000534,
+  "mp_formula": "Li2FeO2",
+  "mp_id": "mp-aaabqzac"
+ },
+ "Li2Fe2O3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiFeO2": {
+  "in_db": true,
+  "n_entries": 9,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiFeO2",
+  "mp_id": "mp-aaabrcta"
+ },
+ "Li3FeO3": {
+  "in_db": true,
+  "n_entries": 5,
+  "min_ehull_meV": 45.708424107144374,
+  "mp_formula": "Li3FeO3",
+  "mp_id": "mp-aaabrwjm"
+ },
+ "Li2MnO2": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 27.874728000001348,
+  "mp_formula": "Li2MnO2",
+  "mp_id": "mp-aaaabcnn"
+ },
+ "Li2Mn2O3": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 87.6611814285715,
+  "mp_formula": "Li2Mn2O3",
+  "mp_id": "mp-aaabrauk"
+ },
+ "LiMnO2": {
+  "in_db": true,
+  "n_entries": 24,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiMnO2",
+  "mp_id": "mp-aaabqyjg"
+ },
+ "Li3MnO3": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 16.778587142857404,
+  "mp_formula": "Li3MnO3",
+  "mp_id": "mp-aaabrayq"
+ },
+ "Li2MnO3": {
+  "in_db": true,
+  "n_entries": 7,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li2MnO3",
+  "mp_id": "mp-aaaabcci"
+ },
+ "Li2Mn2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "Li2NiO2": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 2.5416910000002346,
+  "mp_formula": "Li2NiO2",
+  "mp_id": "mp-aaaabcoq"
+ },
+ "Li2Ni2O3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiNiO2": {
+  "in_db": true,
+  "n_entries": 24,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiNiO2",
+  "mp_id": "mp-aaafdqij"
+ },
+ "Li3NiO3": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 23.292737619048154,
+  "mp_formula": "Li3NiO3",
+  "mp_id": "mp-aaabsagq"
+ },
+ "Li2NiO3": {
+  "in_db": true,
+  "n_entries": 2,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li2NiO3",
+  "mp_id": "mp-aaabfrhu"
+ },
+ "Li2Ni2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "Li2CoO2": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 26.959160625001033,
+  "mp_formula": "Li2CoO2",
+  "mp_id": "mp-aaabqzhx"
+ },
+ "Li2Co2O3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiCoO2": {
+  "in_db": true,
+  "n_entries": 9,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiCoO2",
+  "mp_id": "mp-aaaabhik"
+ },
+ "Li3CoO3": {
+  "in_db": true,
+  "n_entries": 2,
+  "min_ehull_meV": 45.12676214285971,
+  "mp_formula": "Li3CoO3",
+  "mp_id": "mp-aaabragc"
+ },
+ "LiCuO": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiCuO",
+  "mp_id": "mp-aaaaahpf"
+ },
+ "Li3CuO2": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 95.76858625000196,
+  "mp_formula": "Li3CuO2",
+  "mp_id": "mp-aaabrbbz"
+ },
+ "Li2CuO2": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 14.43339124999543,
+  "mp_formula": "Li2CuO2",
+  "mp_id": "mp-aaaaagzf"
+ },
+ "Li2Cu2O3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiTiO2": {
+  "in_db": true,
+  "n_entries": 10,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiTiO2",
+  "mp_id": "mp-aaaaceqi"
+ },
+ "Li3TiO3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "Li2TiO3": {
+  "in_db": true,
+  "n_entries": 7,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li2TiO3",
+  "mp_id": "mp-aaaaaeit"
+ },
+ "Li2Ti2O5": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 28.946053055552312,
+  "mp_formula": "Li2Ti2O5",
+  "mp_id": "mp-aaabraug"
+ },
+ "LiVO2": {
+  "in_db": true,
+  "n_entries": 13,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiVO2",
+  "mp_id": "mp-aaaabcpw"
+ },
+ "Li3VO3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "Li2VO3": {
+  "in_db": true,
+  "n_entries": 2,
+  "min_ehull_meV": 22.451055833339062,
+  "mp_formula": "Li2VO3",
+  "mp_id": "mp-aaabsbgq"
+ },
+ "Li2V2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiVO3": {
+  "in_db": true,
+  "n_entries": 6,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiVO3",
+  "mp_id": "mp-aaaabcrd"
+ },
+ "Li3VO4": {
+  "in_db": true,
+  "n_entries": 2,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li3VO4",
+  "mp_id": "mp-aaaabclf"
+ },
+ "LiFe2O3": {
+  "in_db": true,
+  "n_entries": 5,
+  "min_ehull_meV": 27.34540291666665,
+  "mp_formula": "LiFe2O3",
+  "mp_id": "mp-aaacvwxs"
+ },
+ "LiFe2O4": {
+  "in_db": true,
+  "n_entries": 11,
+  "min_ehull_meV": 32.37830128571595,
+  "mp_formula": "Li(FeO2)2",
+  "mp_id": "mp-aaaablok"
+ },
+ "LiFeO3": {
+  "in_db": true,
+  "n_entries": 6,
+  "min_ehull_meV": 131.20334543333632,
+  "mp_formula": "LiFeO3",
+  "mp_id": "mp-aaabrhmv"
+ },
+ "LiMn2O3": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 43.09335625000088,
+  "mp_formula": "LiMn2O3",
+  "mp_id": "mp-aaadphza"
+ },
+ "LiMn2O4": {
+  "in_db": true,
+  "n_entries": 14,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiMn2O4",
+  "mp_id": "mp-aaacukwa"
+ },
+ "LiMnO3": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 183.92001396665947,
+  "mp_formula": "LiMnO3",
+  "mp_id": "mp-aaacltzl"
+ },
+ "LiMn2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiNi2O3": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 1.8387068055574218,
+  "mp_formula": "LiNi2O3",
+  "mp_id": "mp-aaabrbxv"
+ },
+ "LiNi2O4": {
+  "in_db": true,
+  "n_entries": 10,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li(NiO2)2",
+  "mp_id": "mp-aaabscjl"
+ },
+ "LiNiO3": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 502.4219344545475,
+  "mp_formula": "LiNiO3",
+  "mp_id": "mp-aaacpliz"
+ },
+ "LiNi2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiCo2O3": {
+  "in_db": true,
+  "n_entries": 1,
+  "min_ehull_meV": 127.89989124999934,
+  "mp_formula": "LiCo2O3",
+  "mp_id": "mp-aaacromx"
+ },
+ "LiCo2O4": {
+  "in_db": true,
+  "n_entries": 21,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "Li(CoO2)2",
+  "mp_id": "mp-aaabsbck"
+ },
+ "LiCoO3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiCuO1": {
+  "in_db": true,
+  "n_entries": 3,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiCuO",
+  "mp_id": "mp-aaaaahpf"
+ },
+ "LiCu2O2": {
+  "in_db": true,
+  "n_entries": 2,
+  "min_ehull_meV": 4.688839499999986,
+  "mp_formula": "Li(CuO)2",
+  "mp_id": "mp-aaaabawo"
+ },
+ "LiCuO2": {
+  "in_db": true,
+  "n_entries": 8,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiCuO2",
+  "mp_id": "mp-aaaaanog"
+ },
+ "LiCu2O3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiTi2O4": {
+  "in_db": true,
+  "n_entries": 16,
+  "min_ehull_meV": 0.0,
+  "mp_formula": "LiTi2O4",
+  "mp_id": "mp-aaaaaikc"
+ },
+ "LiTiO3": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiTi2O5": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiV2O4": {
+  "in_db": true,
+  "n_entries": 5,
+  "min_ehull_meV": 12.87099821428761,
+  "mp_formula": "LiV2O4",
+  "mp_id": "mp-aaacvhrf"
+ },
+ "LiV2O5": {
+  "in_db": true,
+  "n_entries": 7,
+  "min_ehull_meV": 9.15778874999873,
+  "mp_formula": "LiV2O5",
+  "mp_id": "mp-aaabsgkh"
+ },
+ "LiV2O6": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ },
+ "LiVO4": {
+  "in_db": false,
+  "n_entries": 0,
+  "min_ehull_meV": NaN,
+  "mp_formula": null,
+  "mp_id": null
+ }
+}

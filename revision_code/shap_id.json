@@ -1,0 +1,34 @@
+{
+ "Avg Voltage (V)": {
+  "mean_abs_shap": 201.50240406410282,
+  "rf_importance": 0.07906625558699112
+ },
+ "Capacity (mAh/g)": {
+  "mean_abs_shap": 606.0100832260756,
+  "rf_importance": 0.7665072798948094
+ },
+ "Formation Energy (eV/atom)": {
+  "mean_abs_shap": 16.41447090337516,
+  "rf_importance": 0.012970929933024422
+ },
+ "Band Gap (eV)": {
+  "mean_abs_shap": 3.1463308353549113,
+  "rf_importance": 0.011006706368556132
+ },
+ "Volume per Atom (A3)": {
+  "mean_abs_shap": 29.12792784322598,
+  "rf_importance": 0.017046355843095336
+ },
+ "N Elements": {
+  "mean_abs_shap": 0.8856991710828513,
+  "rf_importance": 0.0005705057013141321
+ },
+ "Density (g/cc)": {
+  "mean_abs_shap": 214.1512537875517,
+  "rf_importance": 0.10896649985770888
+ },
+ "Energy Above Hull (eV)": {
+  "mean_abs_shap": 2.9555979823650635,
+  "rf_importance": 0.003865466814500638
+ }
+}

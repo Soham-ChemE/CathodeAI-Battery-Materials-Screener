@@ -2,6 +2,9 @@
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[super,sort&compress,comma]{natbib}
+\renewcommand{\thetable}{S\arabic{table}}
 
 \title{Electronic Supplementary Information\\
 \large Beyond heuristics: structure-aware screening reveals the limits of
@@ -12,106 +15,201 @@ composition-based cathode design}
 \begin{document}
 \maketitle
 
-\noindent This Electronic Supplementary Information (ESI) accompanies the
-main manuscript and provides two items referenced in the text: (S1) complete
-literature sources for the Degradation Screening Index (DSI) experimental
-validation set, and (S2) definitions of the auxiliary composite scoring
-functions used throughout the screening pipeline.
+\noindent This Electronic Supplementary Information (ESI) accompanies the main manuscript and provides: (S1) literature sources, descriptor values and DSI scores for the 11-material validation set; (S2) item-by-item notes on the validation sources; (S3) definitions of the composite scoring functions; (S4) item-by-item inputs and database status for the 42 generated compositions; (S5) the Materials Project insertion-electrode entries of the LiCuO$_2$ composition; and (S6) a comparison of the formula-level structural merge used in the original submission with the identifier-level merge used in the revised manuscript. Citation numbers in the ESI reference list are ESI-internal; the corresponding main-text reference numbers are given in Table~\ref{tab:s1_sources}.
 
 \vspace{1em}
 
-% ----- ESI TABLE S1 -----
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Table S1.} Complete DSI descriptor values and literature
-sources for the 11 DSI experimental validation materials. $\Delta V/V$ is the
-volumetric change upon delithiation; $E_\mathrm{hull}$ is the energy above
-hull of the charged (delithiated) phase from Materials Project GGA+U
-calculations; $E_g$ is the electronic band gap. Cycle-life figures are
-representative order-of-magnitude values for each chemistry under typical
-cycling conditions and vary with electrode loading, voltage window, depth of
-discharge, and temperature; the DSI is validated against the \emph{rank
-ordering} of these values (Spearman $\rho$), not their absolute magnitudes.
-Band-gap and energy-above-hull values for the NMC compositions reflect
-Materials Project GGA+U trends for representative ordered structures rather
-than specific experimental measurements.}
+\caption{DSI descriptor values, DSI scores and literature sources for the 11 validation materials. $\Delta V/V$ is the volumetric change upon delithiation; $E_\mathrm{hull}$ is the energy above hull of the charged (delithiated) phase from Materials Project GGA+U calculations; $E_g$ is the electronic band gap. Representative cycle-life figures are order-of-magnitude values for each chemistry under typical cycling conditions that vary with electrode loading, voltage window, depth of discharge and temperature; the DSI is validated against the \emph{rank ordering} of these values (Spearman $\rho$), never their magnitudes. DSI categories: A ($\geq 0.75$), B ($0.55$--$0.75$), C ($0.35$--$0.55$), D ($<0.35$). Band-gap and hull-energy values for the NMC compositions reflect Materials Project GGA+U trends for representative ordered structures rather than specific experimental measurements.}
 \label{tab:s1_sources}
-\setlength{\tabcolsep}{6pt}
+\setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{l c c c c c l}
+\footnotesize
+\begin{tabular}{l c c c c c c c l c c}
 \hline
-\textbf{Material} & \textbf{Exp.\ cycles} & \textbf{$\Delta V/V$ (\%)} &
-\textbf{$E_\mathrm{hull}$ (eV)} & \textbf{$E_g$ (eV)} & \textbf{PO\textsubscript{4}} &
-\textbf{Source} \\
+\textbf{Material} & \textbf{Rep.\ cycles} & \textbf{$\Delta V/V$ (\%)} & \textbf{$E_\mathrm{hull}$ (eV~atom$^{-1}$)} & \textbf{$E_g$ (eV)} & \textbf{PO\textsubscript{4}} & \textbf{DSI} & \textbf{Cat.} & \textbf{Source} & \textbf{ESI ref.} & \textbf{Main-text ref.} \\
 \hline
-LiCoO\textsubscript{2}      & 500    & 2.0  & 0.02 & 0.00 & No  & Mizushima 1980; Reimers 1992 \\
-LiFePO\textsubscript{4}     & 2000   & 6.81 & 0.00 & 3.59 & Yes & Padhi 1997 \\
-LiMnO\textsubscript{2}      & 300    & 16.0 & 0.05 & 0.00 & No  & Armstrong 1996 \\
-NMC111                      & 1000   & 2.5  & 0.03 & 1.50 & No  & Jung 2017 \\
-NMC622                      & 800    & 4.0  & 0.04 & 1.20 & No  & Jung 2017; Liu 2015 \\
-NMC811                      & 800    & 4.0  & 0.06 & 0.80 & No  & Liu 2015 \\
-NCA                         & 500    & 5.0  & 0.08 & 0.70 & No  & Watanabe 2014 \\
-LNMO                        & 1000   & 2.5  & 0.02 & 2.00 & No  & Zhong 1997 \\
-LTO                         & 10000  & 0.1  & 0.00 & 2.72 & No  & Ohzuku 1995 \\
-LiFeMnPO\textsubscript{4}   & 1500   & 5.0  & 0.00 & 3.50 & Yes & Padhi 1997 \\
-Li\textsubscript{2}MnO\textsubscript{3} & 200 & 8.0 & 0.10 & 1.32 & No & Kalyani 1999 \\
+LiCoO\textsubscript{2} & 500 & 2.0 & 0.02 & 0.00 & No & 0.820 & A & Mizushima 1980; Reimers 1992 & \cite{Mizushima1980,Reimers1992} & 42, 35 \\
+LiFePO\textsubscript{4} & 2,000 & 6.81 & 0.00 & 3.59 & Yes & 0.807 & A & Padhi 1997 & \cite{Padhi1997} & 25 \\
+LiMnO\textsubscript{2} & 300 & 16.0 & 0.05 & 0.00 & No & 0.333 & D & Armstrong 1996 & \cite{Armstrong1996} & 36 \\
+NMC111 & 1,000 & 2.5 & 0.03 & 1.50 & No & 0.840 & A & Jung 2017 & \cite{Jung2017} & 37 \\
+NMC622 & 800 & 4.0 & 0.04 & 1.20 & No & 0.759 & A & Jung 2017; Liu 2015 & \cite{Jung2017,Liu2015} & 37, 38 \\
+NMC811 & 800 & 4.0 & 0.06 & 0.80 & No & 0.707 & B & Liu 2015 & \cite{Liu2015} & 38 \\
+NCA & 500 & 5.0 & 0.08 & 0.70 & No & 0.633 & B & Watanabe 2014 & \cite{Watanabe2014} & 43 \\
+LNMO & 1,000 & 2.5 & 0.02 & 2.00 & No & 0.878 & A & Zhong 1997 & \cite{Zhong1997} & 39 \\
+LTO & 10,000 & 0.1 & 0.00 & 2.72 & No & 0.970 & A & Ohzuku 1995 & \cite{Ohzuku1995} & 40 \\
+LiFe\textsubscript{0.5}Mn\textsubscript{0.5}PO\textsubscript{4} & 1,500 & 5.0 & 0.00 & 3.50 & Yes & 0.873 & A & Padhi 1997 & \cite{Padhi1997} & 25 \\
+Li\textsubscript{2}MnO\textsubscript{3} & 200 & 8.0 & 0.10 & 1.32 & No & 0.516 & C & Kalyani 1999 & \cite{Kalyani1999} & 17 \\
 \hline
 \end{tabular}
 
 \vspace{0.5em}
 \noindent\footnotesize
-Cited sources correspond to the correspondingly named entries in the
-main-manuscript bibliography and are the canonical primary or
-characterization references for each chemistry. For NCA, Watanabe
-\textit{et al.} report capacity retention under calendar and cycling
-storage tests rather than a single cycles-to-failure figure; for
-Li$_2$MnO$_3$, Kalyani \textit{et al.} report stable cycling for
-approximately 15 cycles, well below the tabulated 200. Both entries are
-retained as the closest identified primary characterization sources for
-their respective materials; the tabulated cycle-life values are
-representative order-of-magnitude figures for the chemistry class, and
-the DSI is validated against their \emph{rank order} across the 11
-materials (Spearman $\rho$), not their absolute magnitudes, consistent
-with the framing in the main text.
+Cited sources are the canonical primary or characterization references for each chemistry. For NCA, Watanabe \textit{et al.} report capacity retention under calendar and cycling storage tests rather than a single cycles-to-failure figure; for Li$_2$MnO$_3$, Kalyani \textit{et al.} report stable cycling for approximately 15 cycles, well below the tabulated 200. Both entries are retained as the closest identified primary characterization sources; replacing 200 by 15 for Li$_2$MnO$_3$ changes no rank and therefore no reported correlation (main text, Section~2.5). The experimental figures serve only to fix a rank order, and the manuscript makes no claim of absolute cycle-count prediction.
 \normalsize
 \end{table}
 
-\vspace{1em}
 
-% ----- ESI TABLE S2 -----
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Table S2.} Auxiliary composite scoring functions used in the
-screening pipeline, in addition to the Degradation Screening Index (DSI)
-defined in the main text (eqn~(1)). Within each composite score the component
-weights sum to unity.}
+\caption{Item-by-item basis of the representative cycle-life values in Table~\ref{tab:s1_sources}. In every case the representative cycle-life figure is a class-typical order-of-magnitude value chosen to fix a rank order, not a number read from the cited source; the sources are the primary characterization references for the chemistry and, where indicated, the basis of the tabulated volume change.}
+\label{tab:s1b_notes}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\footnotesize
+\begin{tabular}{l p{12.5cm}}
+\hline
+\textbf{Material} & \textbf{What the cited source provides, and status of the representative cycle-life value} \\
+\hline
+LiCoO\textsubscript{2} & Mizushima 1980: original report of Li$_x$CoO$_2$ electrochemistry. Reimers 1992: in situ XRD of Li$_x$CoO$_2$, basis of the small delithiation volume change. Cycle value class-representative. \\
+LiFePO\textsubscript{4} & Padhi 1997: phospho-olivine electrochemistry, reports the 6.81\,\% volume contraction used here. Cycle value class-representative. \\
+LiMnO\textsubscript{2} & Armstrong 1996: synthesis and cycling of layered LiMnO$_2$ with rapid capacity fade. Cycle value class-representative. \\
+NMC111 & Jung 2017: cycling stability and oxygen release of NMC compositions. Cycle value class-representative. \\
+NMC622 & Jung 2017 and Liu 2015 (review of Ni-rich layered oxides): cycling behaviour of Ni-rich NMC. Cycle value class-representative. \\
+NMC811 & Liu 2015: review of Ni-rich layered oxides. Cycle value class-representative. \\
+NCA & Watanabe 2014: capacity fade under calendar and cycle tests; no single cycles-to-failure count is reported. Cycle value class-representative. \\
+LNMO & Zhong 1997: synthesis and electrochemistry of LiNi$_{0.5}$Mn$_{1.5}$O$_4$. Cycle value class-representative. \\
+LTO & Ohzuku 1995: zero-strain insertion (basis of the 0.1\,\% volume change). Anode; retained as a zero-strain reference only. Cycle value class-representative. \\
+LiFe\textsubscript{0.5}Mn\textsubscript{0.5}PO\textsubscript{4} & Padhi 1997: phospho-olivine electrochemistry including mixed Fe/Mn olivines. Cycle value class-representative. \\
+Li\textsubscript{2}MnO\textsubscript{3} & Kalyani 1999: approximately 15 stable cycles reported. Tabulated 200 is class-representative; substituting 15 changes no rank. \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Composite scoring functions used in the screening pipeline, in addition to the Degradation Screening Index (DSI) defined in the main text (eqn~(1)). Within each composite score the component weights sum to unity. The Complete Score is the ranking used for Table~10 and the Pareto analysis of the main text; the Economic Score and the CathodeAI Score are intermediate rankings retained in the released code.}
 \label{tab:s2_scores}
 \setlength{\tabcolsep}{6pt}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabular}{p{3.2cm} p{4.4cm} p{6.6cm}}
+\begin{tabular}{p{3.0cm} p{5.0cm} p{6.6cm}}
 \hline
 \textbf{Composite Score} & \textbf{Components (Weights)} & \textbf{Definition} \\
 \hline
 Performance Score &
 Voltage (0.30), Energy density (0.30), Capacity (0.25), Stability (0.15) &
-Initial electrochemical ranking; voltage scored optimal in the 3.5--4.5~V
-window \\[4pt]
+Initial electrochemical ranking; voltage scored 1.0 in 3.5--4.5~V, 0.7 in 3.0--3.5 and 4.5--5.0~V, 0.4 otherwise; capacity and energy density normalized to their maxima; stability $= 1 - (E_\mathrm{hull,charge}+E_\mathrm{hull,discharge})/\max$ \\[4pt]
 CathodeAI Score &
 Performance (0.50), Supply chain (0.25), Recyclability (0.25) &
-Performance normalized to its maximum; supply chain and recyclability scored
-on $[0,1]$ \\[4pt]
+Performance normalized to its maximum; supply chain and recyclability scored on $[0,1]$ (main text, Section~4.2) \\[4pt]
 CathodeAI Economic Score &
-Performance (0.35), Supply chain (0.20), Recyclability (0.20), Solid state
-(0.15), Cost (0.10) &
-Full multi-objective score including raw-material cost; used to generate
-Table~10 (top-ranked candidates) in the main text \\[4pt]
+Performance (0.35), Supply chain (0.20), Recyclability (0.20), Solid state (0.15), Cost (0.10) &
+Intermediate ranking including raw-material cost; cost score $= 1 - \mathrm{cost}/\max(\mathrm{cost})$ with cost by dominant metal (Co 45, Ni 18, Mn 8, Fe 5, Cu 12, V 35, Ti 15, Cr 12, default 20~US\$~kWh$^{-1}$) \\[4pt]
+Complete Score (Table~10) &
+Performance (0.25), Supply chain (0.20), Recyclability (0.15), Solid state (0.15), Cost (0.10), Thermal safety (0.10), DSI (0.05) &
+Full eight-layer ranking used for Table~10 and the Pareto analysis; the DSI term replaces the metal-identity cycle-life estimate used in the original submission; entries without a computable DSI receive the median DSI \\[4pt]
+Price-scenario Score &
+Performance (0.25), Supply chain (0.20), Recyclability (0.15), Solid state (0.15), Scenario cost (0.15), Thermal safety (0.10) &
+Re-scored under five commodity-price scenarios (main text, Section~4.5) \\[4pt]
 Novel Score &
-Predicted energy density (0.40), Supply chain (0.20), Recyclability (0.20),
-Solid state (0.20) &
-Applied to the 42 generated compositions; predicted energy density from the
-trained 8-feature Random Forest model \\
+Predicted energy density (0.40), Supply chain (0.20), Recyclability (0.20), Solid state (0.20) &
+Applied to the 42 generated compositions; predicted energy density from the 4-feature electrochemical Random Forest (voltage, capacity, charged- and discharged-phase hull energy), not the 8-feature model, because structural descriptors of hypothetical compositions are unavailable; normalized to its maximum \\
 \hline
 \end{tabular}
 \end{table}
 
+\clearpage
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{l l l c c c c c l c}
+\caption{Item-by-item inputs and Materials Project status for the 42 generated compositions. Generated formula and structure-family template as enumerated; ``reduced'' is the smallest-integer formula used for the corrected database query; formal M state is the metal oxidation state implied by charge balance; assigned voltage (lookup by metal and oxidation state, clipped to the template range) and capacity (Faraday's law for the lithium content, clipped to the template range) are the model inputs, together with assumed hull energies of 0.02~eV~atom$^{-1}$; predicted energy density from the 4-feature Random Forest; $E_\mathrm{hull}$ is the minimum energy above hull (meV~atom$^{-1}$) among Materials Project entries of the reduced formula, or ``absent''. The last two columns show the lithium-index-stripped formula used in the original submission's query and its outcome, which differed from the correct one for many compositions.}\label{tab:s3_novel}\\
+\hline
+Generated & Reduced & Template & M state & $V$ (V) & $C$ (mAh~g$^{-1}$) & Pred.\ ED & $E_\mathrm{hull}$ (correct) & Original query & $E_\mathrm{hull}$ (original) \\
+\hline
+\endfirsthead
+\hline
+Generated & Reduced & Template & M state & $V$ (V) & $C$ (mAh~g$^{-1}$) & Pred.\ ED & $E_\mathrm{hull}$ (correct) & Original query & $E_\mathrm{hull}$ (original) \\
+\hline
+\endhead
+Li$_{2}$Co$_{2}$O$_{3}$ & Li$_{2}$Co$_{2}$O$_{3}$ & layered & 2 & 3.70 & 298 & 3796 & absent & LiCo$_{2}$O$_{3}$ & 127.9 \\
+Li$_{2}$Co$_{2}$O$_{4}$ & LiCoO$_{2}$ & layered & 3 & 4.00 & 274 & 4181 & 0.0 & LiCo$_{2}$O$_{4}$ & 0.0 \\
+Li$_{2}$CoO$_{2}$ & Li$_{2}$CoO$_{2}$ & layered & 2 & 3.70 & 300 & 3810 & 27.0 & LiCoO$_{2}$ & 0.0 \\
+Li$_{3}$CoO$_{3}$ & Li$_{3}$CoO$_{3}$ & layered & 3 & 4.00 & 300 & 3780 & 45.1 & LiCoO$_{3}$ & absent \\
+LiCoO$_{2}$ & LiCoO$_{2}$ & layered & 3 & 4.00 & 274 & 4181 & 0.0 & LiCoO$_{2}$ & 0.0 \\
+Li$_{2}$Cu$_{2}$O$_{2}$ & LiCuO & layered & 1 & 3.50 & 300 & 3679 & 0.0 & LiCu$_{2}$O$_{2}$ & 4.7 \\
+Li$_{2}$Cu$_{2}$O$_{3}$ & Li$_{2}$Cu$_{2}$O$_{3}$ & layered & 2 & 3.90 & 284 & 3631 & absent & LiCu$_{2}$O$_{3}$ & absent \\
+Li$_{2}$CuO$_{2}$ & Li$_{2}$CuO$_{2}$ & layered & 2 & 3.90 & 300 & 3729 & 14.4 & LiCuO$_{2}$ & 0.0 \\
+Li$_{3}$CuO$_{2}$ & Li$_{3}$CuO$_{2}$ & layered & 1 & 3.50 & 300 & 3679 & 95.8 & LiCuO$_{2}$ & 0.0 \\
+LiCuO$_{1}$ & LiCuO & layered & 1 & 3.50 & 300 & 3679 & 0.0 & LiCuO$_{1}$ & 0.0 \\
+Li$_{2}$Fe$_{2}$O$_{3}$ & Li$_{2}$Fe$_{2}$O$_{3}$ & layered & 2 & 3.50 & 300 & 3679 & absent & LiFe$_{2}$O$_{3}$ & 27.3 \\
+Li$_{2}$Fe$_{2}$O$_{4}$ & LiFeO$_{2}$ & layered & 3 & 3.80 & 283 & 3884 & 0.0 & LiFe$_{2}$O$_{4}$ & 32.4 \\
+Li$_{2}$FeO$_{2}$ & Li$_{2}$FeO$_{2}$ & layered & 2 & 3.50 & 300 & 3679 & 2.0 & LiFeO$_{2}$ & 0.0 \\
+Li$_{3}$FeO$_{3}$ & Li$_{3}$FeO$_{3}$ & layered & 3 & 3.80 & 300 & 3818 & 45.7 & LiFeO$_{3}$ & 131.2 \\
+LiFeO$_{2}$ & LiFeO$_{2}$ & layered & 3 & 3.80 & 283 & 3884 & 0.0 & LiFeO$_{2}$ & 0.0 \\
+Li$_{2}$Mn$_{2}$O$_{3}$ & Li$_{2}$Mn$_{2}$O$_{3}$ & layered & 2 & 3.50 & 300 & 3679 & 87.7 & LiMn$_{2}$O$_{3}$ & 43.1 \\
+Li$_{2}$Mn$_{2}$O$_{4}$ & LiMnO$_{2}$ & layered & 3 & 3.50 & 285 & 3802 & 0.0 & LiMn$_{2}$O$_{4}$ & 0.0 \\
+Li$_{2}$Mn$_{2}$O$_{5}$ & Li$_{2}$Mn$_{2}$O$_{5}$ & layered & 4 & 4.00 & 263 & 3326 & absent & LiMn$_{2}$O$_{5}$ & absent \\
+Li$_{2}$MnO$_{2}$ & Li$_{2}$MnO$_{2}$ & layered & 2 & 3.50 & 300 & 3679 & 27.9 & LiMnO$_{2}$ & 0.0 \\
+Li$_{2}$MnO$_{3}$ & Li$_{2}$MnO$_{3}$ & layered & 4 & 4.00 & 300 & 3780 & 0.0 & LiMnO$_{3}$ & 183.9 \\
+Li$_{3}$MnO$_{3}$ & Li$_{3}$MnO$_{3}$ & layered & 3 & 3.50 & 300 & 3679 & 16.8 & LiMnO$_{3}$ & 183.9 \\
+LiMnO$_{2}$ & LiMnO$_{2}$ & layered & 3 & 3.50 & 285 & 3802 & 0.0 & LiMnO$_{2}$ & 0.0 \\
+Li$_{2}$Ni$_{2}$O$_{3}$ & Li$_{2}$Ni$_{2}$O$_{3}$ & layered & 2 & 3.60 & 299 & 3801 & absent & LiNi$_{2}$O$_{3}$ & 1.8 \\
+Li$_{2}$Ni$_{2}$O$_{4}$ & LiNiO$_{2}$ & layered & 3 & 3.90 & 275 & 4325 & 0.0 & LiNi$_{2}$O$_{4}$ & 0.0 \\
+Li$_{2}$Ni$_{2}$O$_{5}$ & Li$_{2}$Ni$_{2}$O$_{5}$ & layered & 4 & 4.20 & 254 & 3082 & absent & LiNi$_{2}$O$_{5}$ & absent \\
+Li$_{2}$NiO$_{2}$ & Li$_{2}$NiO$_{2}$ & layered & 2 & 3.60 & 300 & 3815 & 2.5 & LiNiO$_{2}$ & 0.0 \\
+Li$_{2}$NiO$_{3}$ & Li$_{2}$NiO$_{3}$ & layered & 4 & 4.20 & 300 & 3771 & 0.0 & LiNiO$_{3}$ & 502.4 \\
+Li$_{3}$NiO$_{3}$ & Li$_{3}$NiO$_{3}$ & layered & 3 & 3.90 & 300 & 3729 & 23.3 & LiNiO$_{3}$ & 502.4 \\
+LiNiO$_{2}$ & LiNiO$_{2}$ & layered & 3 & 3.90 & 275 & 4325 & 0.0 & LiNiO$_{2}$ & 0.0 \\
+Li$_{2}$Ti$_{2}$O$_{4}$ & LiTiO$_{2}$ & layered & 3 & 3.50 & 300 & 3679 & 0.0 & LiTi$_{2}$O$_{4}$ & 0.0 \\
+Li$_{2}$Ti$_{2}$O$_{5}$ & Li$_{2}$Ti$_{2}$O$_{5}$ & layered & 4 & 3.50 & 283 & 3859 & 28.9 & LiTi$_{2}$O$_{5}$ & absent \\
+Li$_{2}$TiO$_{3}$ & Li$_{2}$TiO$_{3}$ & layered & 4 & 3.50 & 300 & 3679 & 0.0 & LiTiO$_{3}$ & absent \\
+Li$_{3}$TiO$_{3}$ & Li$_{3}$TiO$_{3}$ & layered & 3 & 3.50 & 300 & 3679 & absent & LiTiO$_{3}$ & absent \\
+LiTiO$_{2}$ & LiTiO$_{2}$ & layered & 3 & 3.50 & 300 & 3679 & 0.0 & LiTiO$_{2}$ & 0.0 \\
+Li$_{2}$V$_{2}$O$_{4}$ & LiVO$_{2}$ & layered & 3 & 3.50 & 298 & 3665 & 0.0 & LiV$_{2}$O$_{4}$ & 12.9 \\
+Li$_{2}$V$_{2}$O$_{5}$ & Li$_{2}$V$_{2}$O$_{5}$ & layered & 4 & 3.50 & 274 & 4360 & absent & LiV$_{2}$O$_{5}$ & 9.2 \\
+Li$_{2}$V$_{2}$O$_{6}$ & LiVO$_{3}$ & layered & 5 & 3.80 & 253 & 3148 & 0.0 & LiV$_{2}$O$_{6}$ & absent \\
+Li$_{2}$VO$_{3}$ & Li$_{2}$VO$_{3}$ & layered & 4 & 3.50 & 300 & 3679 & 22.5 & LiVO$_{3}$ & 0.0 \\
+Li$_{3}$VO$_{3}$ & Li$_{3}$VO$_{3}$ & layered & 3 & 3.50 & 300 & 3679 & absent & LiVO$_{3}$ & 0.0 \\
+Li$_{3}$VO$_{4}$ & Li$_{3}$VO$_{4}$ & layered & 5 & 3.80 & 300 & 3818 & 0.0 & LiVO$_{4}$ & absent \\
+LiVO$_{2}$ & LiVO$_{2}$ & layered & 3 & 3.50 & 298 & 3665 & 0.0 & LiVO$_{2}$ & 0.0 \\
+LiVO$_{3}$ & LiVO$_{3}$ & layered & 5 & 3.80 & 253 & 3148 & 0.0 & LiVO$_{3}$ & 0.0 \\
+\hline
+\end{longtable}
+\end{center}
+
+\begin{table}[htbp]
+\centering
+\caption{Materials Project insertion-electrode entries whose base formula is LiCuO$_2$. Li$_{a\text{--}b}$ denotes the lithium range spanned by the entry; $E_\mathrm{hull}$ in meV~atom$^{-1}$. The discharge and charge identifiers are the Materials Project material identifiers of the end-members; three of the discharge or charge end-members coincide with the eight LiCuO$_2$ polymorph entries and provide the polymorph-resolved DSI values of Table~5 in the main text.}
+\label{tab:s4_licuo2}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\footnotesize
+\begin{tabular}{l c c c c l l}
+\hline
+Entry & $V$ (V) & $\Delta V/V$ (\%) & $E_\mathrm{hull,charge}$ & $E_\mathrm{hull,discharge}$ & Discharge end-member & Charge end-member \\
+\hline
+Li$_{0\text{--}0.5}$CuO$_{2}$ & 4.53 & 1.95 & 175 & 35 & \texttt{mp-aaaabloj} & \texttt{mp-aaabcrsm} \\
+Li$_{1.33\text{--}2}$CuO$_{2}$ & 2.57 & 4.76 & 28 & 14 & \texttt{mp-aaaaagzf} & \texttt{mp-aaabqvit} \\
+Li$_{1\text{--}1.5}$CuO$_{2}$ & 2.86 & 6.57 & 25 & 10 & \texttt{mp-aaacroth} & \texttt{mp-aaabrzom} \\
+Li$_{0\text{--}1}$CuO$_{2}$ & 3.94 & 4.69 & 164 & 68 & \texttt{mp-aaaablnw} & \texttt{mp-aaaabloc} \\
+Li$_{0\text{--}1}$CuO$_{2}$ & 4.58 & 46.64 & 286 & 0 & \texttt{mp-aaaaanog} & \texttt{mp-aaabizdd} \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Five-fold cross-validated $R^2$ (Random Forest, mean $\pm$ standard deviation across folds) for the formula-level structural merge of the original submission (1,702 entries, descriptors averaged over all structural entries sharing a base formula) and the identifier-level merge of the revised manuscript (1,724 entries, descriptors of each electrode's own discharged structure), under random and grouped (by base formula) fold assignment. The last row is the unfitted arithmetic relation $V\times C\times\rho$.}
+\label{tab:s5_merge}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{l c c c c}
+\hline
+ & \multicolumn{2}{c}{Formula-level merge (original)} & \multicolumn{2}{c}{Identifier-level merge (revised)} \\
+Feature set & Random CV & Grouped CV & Random CV & Grouped CV \\
+\hline
+Electrochemical only (4) & 0.858 $\pm$ 0.034 & 0.830 $\pm$ 0.029 & 0.856 $\pm$ 0.024 & 0.841 $\pm$ 0.042 \\
+Structural only (6) & 0.337 $\pm$ 0.085 & 0.207 $\pm$ 0.065 & 0.361 $\pm$ 0.045 & 0.265 $\pm$ 0.114 \\
+Combined (8) & 0.939 $\pm$ 0.057 & 0.933 $\pm$ 0.051 & 0.948 $\pm$ 0.045 & 0.942 $\pm$ 0.063 \\
+$V\times C\times\rho$ (no fitting) & 0.9849 & -- & 0.9990 & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+\bibliographystyle{rsc}
+\bibliography{rsc}
 \end{document}
