@@ -161,7 +161,7 @@ CathodeAI-Battery-Materials-Screener/
 
 ---
 
-## Scope, honestly
+## Scope
 
 The DSI is a screening heuristic for durability *ranking* within the chemistries it was validated on. Eleven materials cannot support learned weights or claims of generalisation to other families. Generated compositions are screening-level priors with assigned inputs, not predictions, and none has been evaluated with first-principles calculations. Energy densities are theoretical values for full lithium extraction.
 
