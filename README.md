@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-0b1220?style=flat-square)](LICENSE)
 
 **Soham Kavathekar** · MS Chemical & Biomolecular Engineering, University of Pennsylvania
-[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-72a22b246)
+[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-cheme)
 
 *Manuscript under revision at* Physical Chemistry Chemical Physics *(Royal Society of Chemistry), 2026.*
 
