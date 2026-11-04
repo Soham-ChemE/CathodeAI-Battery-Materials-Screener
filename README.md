@@ -171,8 +171,6 @@ CathodeAI-Battery-Materials-Screener/
 ├── docs/                               # live page (GitHub Pages), CLAIMS.md audit, build_assets.py
 ├── revision_code/                      # reproduction scripts + cached MP data (revised analysis)
 ├── figures_revised/                    # all 21 manuscript figures (300 dpi)
-├── CathodeAI_complete_pipeline.py      # original 53-section Colab pipeline (kept for provenance)
-├── CathodeAI_complete_clean.ipynb      # original notebook with rendered outputs
 ├── esi_main.tex · rsc.bib              # supplementary information and references
 └── cathodeai_*.png                     # figures referenced above
 ```

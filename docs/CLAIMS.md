@@ -18,7 +18,7 @@ fresh run only in the 16th decimal place.
 | DSI continuous score rho 0.82, p 0.002 | `val.rho_cont`, `val.p_cont` | 0.8192, 0.0020 | matches |
 | Volume strain alone rho 0.55, p 0.08 | `val.rho_single`, `val.p_single` | 0.5491, 0.0802 | matches |
 | Metal-identity heuristic on the same 11: rho 0.55, p 0.08 | `analysis_dsi.py:138` (metal lookup + voltage + phosphate) | rho 0.545, p 0.083 | matches |
-| 10 of 11 on the correct side of the durable split | criterion from `CathodeAI_complete_pipeline.py:3410` (class B or better vs >= 500 cycles) applied to `val.cats`; `docs/build_assets.py` recomputes it | 10 of 11 (Li2MnO3 is the miss) | matches; never written as a percentage |
+| 10 of 11 on the correct side of the durable split | criterion (class B or better vs >= 500 cycles) applied to `val.cats`; `docs/build_assets.py` recomputes it | 10 of 11 (Li2MnO3 is the miss) | matches; never written as a percentage |
 | Bootstrap 95 % CI [0.51, 0.93] | `analysis_dsi.py:81` | [0.509, 0.934] | matches |
 | Leave-one-out: DSI ahead of the single descriptor in 11 of 11 iterations | drop-one recomputation of rho for DSI bins and the single descriptor (`docs/CLAIMS.md` check script, same definitions as `analysis_dsi.py:13-29`) | 11 of 11 | matches |
 | Without LTO: rho 0.77 | `val.no_lto` | 0.7678, p 0.0095 | matches |
