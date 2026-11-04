@@ -1,17 +1,19 @@
-<p align="center"><img src="hero.png" alt="CathodeAI" width="100%"></p>
+<p align="center"><a href="https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/"><img src="docs/assets/hero.png" alt="CathodeAI live page: 3D scatter of 787 screened cathode materials coloured by Degradation Screening Index" width="100%"></a></p>
 
 <div align="center">
+
+### [▶ View the live page](https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/) · interactive 3D screen of 787 cathodes, the LiCuO₂ polymorphs, the funnel
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-0b1220?style=flat-square&logo=python&logoColor=22D3EE)](https://python.org)
 [![Data: Materials Project](https://img.shields.io/badge/Data-Materials%20Project-0b1220?style=flat-square&logoColor=22D3EE)](https://materialsproject.org)
 [![scikit-learn](https://img.shields.io/badge/ML-scikit--learn%20%7C%20XGBoost%20%7C%20SHAP-0b1220?style=flat-square&logoColor=22D3EE)](https://scikit-learn.org)
-[![Reproducible](https://img.shields.io/badge/Every%20number-reproducible%20from%20cached%20data-0b1220?style=flat-square&logoColor=22D3EE)](revision_code/README.md)
+[![Reproducible](https://img.shields.io/badge/Every%20number-reproducible%20with%20one%20script-0b1220?style=flat-square&logoColor=22D3EE)](docs/CLAIMS.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-0b1220?style=flat-square)](LICENSE)
 
 **Soham Kavathekar** · MS Chemical & Biomolecular Engineering, University of Pennsylvania
-[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [LinkedIn](https://www.linkedin.com/in/soham-kavathekar-cheme)
+[stg3719@seas.upenn.edu](mailto:stg3719@seas.upenn.edu) · [linkedin.com/in/soham-kavathekar-cheme](https://www.linkedin.com/in/soham-kavathekar-cheme)
 
-*Manuscript under revision at* Physical Chemistry Chemical Physics *(Royal Society of Chemistry), 2026.*
+*Sole author. Preprint: ChemRxiv, doi [10.26434/chemrxiv.15010709/v1](https://doi.org/10.26434/chemrxiv.15010709/v1). Manuscript under revision at* Physical Chemistry Chemical Physics *(Royal Society of Chemistry), 2026.*
 
 </div>
 
@@ -21,13 +23,26 @@
 
 **Which transition metal a cathode contains tells you little about how long it will last. Its crystal structure, and what that structure does when lithium leaves, tells you more.**
 
-CathodeAI screens **2,774 lithium-ion insertion electrodes** from the Materials Project with a transparent, three-descriptor **Degradation Screening Index (DSI)** built from delithiation volume strain, charged-phase hull energy and band gap. Against 11 experimentally characterised cathodes the DSI ranks durability better than the metal-identity heuristic it replaces, and it resolves durability differences *within* a single composition that no composition-based rule can see.
+CathodeAI screens **2,774 lithium-ion insertion electrodes** from the Materials Project through an eight-layer funnel and ranks them with a transparent, three-descriptor **Degradation Screening Index (DSI)** built from delithiation volume strain, charged-phase hull energy and band gap. Against 11 experimentally characterised cathodes the DSI ranks durability at **Spearman ρ = 0.76 (p = 0.007)**, against 0.55 for volume strain alone and 0.55 for the metal-identity heuristic it replaces, and it places **10 of 11** cathodes on the correct side of the durable / non-durable split. It also resolves durability differences *within* a single composition that no composition-based rule can see.
 
-Every number in this README, in the manuscript and in the figures is produced by the scripts in [`revision_code/`](revision_code/) from cached Materials Project responses. Nothing is typed by hand.
+Every number in this README, on the live page and in the manuscript is produced by `./reproduce.sh` from cached Materials Project responses. The audit trail, claim by claim, is in [`docs/CLAIMS.md`](docs/CLAIMS.md).
 
 ---
 
-## What the data say
+## Results
+
+| Result | Value | Where it comes from |
+|---|---|---|
+| Electrodes screened | 2,774 (16,510 Li-O structural documents) | `revision_code/mpdata/`, `repro_pipeline.py` |
+| Funnel | 1,886 → 1,864 → 813 oxide cathodes → 787 with a DSI → 26 discovery-zone compositions | `repro_pipeline.py`, `analysis_dsi.py` |
+| DSI classes vs experimental cycle life (n = 11) | ρ = 0.76, p = 0.007 | `analysis_dsi_results.json` |
+| DSI continuous score | ρ = 0.82, p = 0.002 | same |
+| Volume strain alone, same binning | ρ = 0.55, p = 0.08 | same |
+| Metal-identity heuristic, same 11 | ρ = 0.55, p = 0.08 | `analysis_dsi.py` |
+| Binary durable split (class B or better vs ≥ 500 cycles) | 10 of 11 correct | `docs/build_assets.py` |
+| Metal-identity heuristic vs structure-based strain indicator | Pearson r = 0.151 across 569 unique formulas | `repro_pipeline.py` |
+| Bootstrap 95 % CI on ρ (10,000 resamples) | [0.51, 0.93] | `analysis_dsi.py` |
+| Nested leave-one-out weight optimisation | collapses to ρ = 0.18, so weights stay expert-set | same |
 
 <table>
 <tr>
@@ -44,7 +59,7 @@ On 11 experimentally characterised cathodes (layered oxides, olivines, spinels, 
 | Single strain descriptor | 0.55 | 0.08 |
 | Metal-identity heuristic | 0.55 | 0.08 |
 
-Robust to weight choice (five of six schemes beat the baseline), to leaving any one material out (11 of 11), and to 24 meV/atom noise on the DFT hull energies (median ρ unchanged at 0.76).
+Robust to weight choice (five of six schemes beat the baseline), to leaving any one material out (DSI ahead in 11 of 11), to removing LTO (ρ = 0.77) and to 24 meV/atom noise on the DFT hull energies (median ρ unchanged at 0.76).
 
 </td>
 <td width="50%" valign="top">
@@ -65,25 +80,25 @@ A composition heuristic assigns all three the same number. The DSI does not.
 </tr>
 </table>
 
-<p align="center"><img src="cathodeai_polymorph_analysis.png" width="100%"></p>
+<p align="center"><img src="cathodeai_polymorph_analysis.png" alt="LiCuO2 polymorph analysis: volume change, charged-phase hull energy and DSI for the C2/m, R-3m and Cm polymorphs" width="100%"></p>
 
 ### 03 · Multi-objective screening: no universal winner
 
 Pareto analysis over energy density, DSI and supply-chain criticality gives a different non-dominated set for every application pair (EV, consumer, grid). LiCuO₂-based entries top the composite ranking in all five commodity-price scenarios because they contain no cobalt or nickel, yet they sit in durability class C, while copper phosphates rank lower on energy density and sit in class A.
 
-<p align="center"><img src="cathodeai_pareto_frontier.png" width="100%"></p>
+<p align="center"><img src="cathodeai_pareto_frontier.png" alt="Pareto frontiers for EV, consumer and grid application pairs over energy density, DSI and cost" width="100%"></p>
 
 ### 04 · A negative result, stated plainly
 
 For **energy-density prediction**, neither compositional descriptors (132 Magpie features, R² = 0.39) nor structural descriptors alone (R² = 0.36, 0.27 under grouped cross-validation) are predictive. An 8-feature model reaches R² = 0.95, but a model given only voltage, capacity and density reaches R² = 0.96, and the unfitted product V × C × ρ reaches R² = 0.999 once each electrode is matched to the density of its own structure. The learned model adds nothing to the arithmetic identity; its role is limited to coverage of incomplete records and interval estimation. We say so in the paper rather than around it.
 
-<p align="center"><img src="cathodeai_feature_engineering.png" width="100%"></p>
+<p align="center"><img src="cathodeai_feature_engineering.png" alt="Feature-set comparison for energy-density prediction: electrochemical, structural, combined and Magpie descriptors" width="100%"></p>
 
 ---
 
 ## How the screen works
 
-<p align="center"><img src="pipeline.png" width="100%"></p>
+<p align="center"><img src="pipeline.png" alt="Eight-layer CathodeAI screening pipeline" width="100%"></p>
 
 | Layer | Criterion | Entries retained |
 |---|---|---|
@@ -106,7 +121,7 @@ S_bg   = max(0, 1 − |E_g − 2.0 eV| / 4.0 eV)         band gap of the dischar
 
 Normalisation bounds are the 95th percentiles of the 2,774-entry training set. Weights are **expert-assigned, not learned**: a nested leave-one-out weight optimisation on 11 materials collapses to ρ = 0.18, which is exactly why they are not learned. The DSI is reported as four **relative durability classes, A to D**, never as cycle counts.
 
-<p align="center"><img src="cathodeai_dsi_model.png" width="100%"></p>
+<p align="center"><img src="cathodeai_dsi_model.png" alt="DSI model: descriptor normalisation, weighting and validation against 11 experimental cathodes" width="100%"></p>
 
 ---
 
@@ -117,7 +132,7 @@ Peer review at PCCP, plus a full re-run of the pipeline from the raw database, f
 - **One durability method.** The original code used three different cycle-life estimators in different places. Everything now uses the DSI, as classes.
 - **Identifier-level structural merge.** Descriptors now come from each electrode's own discharged structure (1,724 entries) instead of being averaged over every structure sharing a formula, which had mixed polymorphs and even lithium stoichiometries.
 - **Corrected novelty check.** Generated compositions are now queried with their real stoichiometry. Five of the eight "database-absent" candidates in the original release were known compounds written with the lithium index stripped.
-- **Withdrawn claims.** The "seven-fold" polymorph variation (an artefact of the binning), the "R² = 0.986 at 100 % coverage" missing-data result (the mask was never applied) and the "structure beats composition for energy density" framing are gone. The phosphate advantage is shown to follow from the design bonuses in the scores.
+- **Withdrawn claims.** The polymorph cycle-life ratio of the original release (an artefact of mapping static volume onto a strain proxy that spans the full bin range by construction), the "R² = 0.986 at 100 % coverage" missing-data result (the mask was never applied) and the "structure beats composition for energy density" framing are gone. The phosphate advantage is shown to follow from the design bonuses in the scores.
 - **Materials Project notation fixed.** `Li0-1CuO2` means an electrode spanning 0 to 1 Li per formula unit; it is no longer rendered as Li<sub>0.1</sub>CuO<sub>2</sub>.
 
 The full list of numeric changes is in the manuscript's response to reviewers.
@@ -128,29 +143,30 @@ The full list of numeric changes is in the manuscript's response to reviewers.
 
 | | |
 |---|---|
-| <img src="cathodeai_discovery_sweetspot.png"> Discovery zone: composite score vs hull energy | <img src="cathodeai_po4_comparison.png"> Phosphate "advantage" with and without the design bonuses |
-| <img src="cathodeai_weight_robustness.png"> DSI weight robustness and nested leave-one-out | <img src="cathodeai_umap.png"> UMAP of 1,724 known and 42 generated compositions |
+| <img src="cathodeai_discovery_sweetspot.png" alt="Discovery zone: composite score against hull energy"> Discovery zone: composite score vs hull energy | <img src="cathodeai_po4_comparison.png" alt="Phosphate advantage with and without the design bonuses"> Phosphate "advantage" with and without the design bonuses |
+| <img src="cathodeai_weight_robustness.png" alt="DSI weight robustness across six schemes and nested leave-one-out"> DSI weight robustness and nested leave-one-out | <img src="cathodeai_umap.png" alt="UMAP of 1,724 known and 42 generated compositions"> UMAP of 1,724 known and 42 generated compositions |
 
 ---
 
-## Reproduce it
+## How to run
 
 ```bash
 git clone https://github.com/Soham-ChemE/CathodeAI-Battery-Materials-Screener.git
 cd CathodeAI-Battery-Materials-Screener
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cd revision_code
-python repro_pipeline.py            # rebuilds the pipeline from cached Materials Project JSON (no API key needed)
-STATE=repro_state_id.pkl TAG=_id python analysis_ml.py
-STATE=repro_state_id.pkl TAG=_id python analysis_ml2.py
-python analysis_dsi.py
-python gen_tables.py && python make_figures.py
+./reproduce.sh            # pipeline + DSI analysis + docs assets, about 2 minutes, no API key
+FULL=1 ./reproduce.sh     # adds the Magpie / SHAP / uncertainty analyses and regenerates all 21 figures (about 15 minutes)
 ```
 
-The cached Materials Project responses (`revision_code/mpdata/`) reproduce the original document counts exactly (2,774 electrodes, 16,510 Li-O structures). Only `analysis_novel.py` re-queries the database, and it reads the key from the `MP_API_KEY` environment variable. See [`revision_code/README.md`](revision_code/README.md) for the full order.
+`reproduce.sh` runs, in order, `repro_pipeline.py` (cached Materials Project JSON → pipeline state; prints 2,774 / 1,886 / 1,864 / 813), `analysis_ml.py`, `build_state_id.py` (identifier-level state), `analysis_dsi.py` (validation, polymorphs, Pareto, price scenarios, discovery zone) and `docs/build_assets.py` (the live page's data and figures). The cached responses in `revision_code/mpdata/` reproduce the original document counts exactly. Only `analysis_novel.py` re-queries the database, and it reads the key from the `MP_API_KEY` environment variable. See [`revision_code/README.md`](revision_code/README.md) for details.
+
+To view the live page locally, open `docs/index.html` in a browser; it needs no build step.
 
 ```
 CathodeAI-Battery-Materials-Screener/
+├── reproduce.sh                        # one-command reproduction
+├── docs/                               # live page (GitHub Pages), CLAIMS.md audit, build_assets.py
 ├── revision_code/                      # reproduction scripts + cached MP data (revised analysis)
 ├── figures_revised/                    # all 21 manuscript figures (300 dpi)
 ├── CathodeAI_complete_pipeline.py      # original 53-section Colab pipeline (kept for provenance)
@@ -164,6 +180,19 @@ CathodeAI-Battery-Materials-Screener/
 ## Scope
 
 The DSI is a screening heuristic for durability *ranking* within the chemistries it was validated on. Eleven materials cannot support learned weights or claims of generalisation to other families. Generated compositions are screening-level priors with assigned inputs, not predictions, and none has been evaluated with first-principles calculations. Energy densities are theoretical values for full lithium extraction.
+
+## Citation
+
+```bibtex
+@article{kavathekar2026cathodeai,
+  author  = {Kavathekar, Soham},
+  title   = {CathodeAI: structure-aware degradation screening of lithium-ion cathode materials},
+  journal = {ChemRxiv preprint},
+  year    = {2026},
+  doi     = {10.26434/chemrxiv.15010709/v1},
+  note    = {Manuscript under revision at Physical Chemistry Chemical Physics}
+}
+```
 
 ## License and acknowledgements
 
