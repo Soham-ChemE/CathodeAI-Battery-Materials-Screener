@@ -49,7 +49,10 @@ cat_counts = m["DSI category"].str[0].value_counts().to_dict()
 
 # ---------------- experimental validation set ----------------
 exp = {"LiCoO2": 500, "LiFePO4": 2000, "LiMnO2": 300, "NMC111": 1000, "NMC622": 800, "NMC811": 800, "NCA": 500, "LNMO": 1000, "LTO": 10000, "LFMP": 1500, "Li2MnO3": 200}
-validation = [{"name": k, "exp_cycles": exp[k], "dsi": round(val["scores"][k], 3), "cat": val["cats"][k][0]} for k in exp]
+# descriptor values of the validation set exactly as used in revision_code/analysis_dsi.py (volume change %, charged-phase hull energy eV/atom, band gap eV)
+desc = {"LiCoO2": (2.0, 0.02, 0.00), "LiFePO4": (6.81, 0.00, 3.594), "LiMnO2": (16.0, 0.05, 0.00), "NMC111": (2.5, 0.03, 1.50), "NMC622": (4.0, 0.04, 1.20), "NMC811": (4.0, 0.06, 0.80),
+        "NCA": (5.0, 0.08, 0.70), "LNMO": (2.5, 0.02, 2.00), "LTO": (0.1, 0.00, 2.72), "LFMP": (5.0, 0.00, 3.50), "Li2MnO3": (8.0, 0.10, 1.317)}
+validation = [{"name": k, "exp_cycles": exp[k], "dsi": round(val["scores"][k], 3), "cat": val["cats"][k][0], "dv": desc[k][0], "eh": desc[k][1], "bg": desc[k][2]} for k in exp]
 binmap = {"A": 2200, "B": 1500, "C": 750, "D": 300}
 n_correct = sum((v["exp_cycles"] >= 500) == (binmap[v["cat"]] >= 500) for v in validation)
 
@@ -128,3 +131,54 @@ fig.text(0.05, 0.60, "Structure-aware degradation screening\nof 2,774 Li-ion cat
 fig.text(0.05, 0.34, f"Spearman rho {val['rho_bins']:.2f} on 11 experimental cathodes\n{n_correct} of 11 on the right side of the durable split\nMaterials Project data, every number reproducible", color=ACC, fontsize=14, va="top")
 fig.text(0.05, 0.10, "Soham Kavathekar  |  github.com/Soham-ChemE", color=MUTED, fontsize=12)
 fig.savefig(os.path.join(OUT, "social-preview.png"), dpi=100, facecolor=DARK); plt.close(fig); print("wrote social-preview.png")
+
+
+# ---------------- animated README hero (SVG with CSS keyframes; GitHub renders these through <img>) ----------------
+# A 2-D projection of the same 787-material cloud (volume change against charged-phase hull energy, coloured by DSI) with the
+# eleven validation cathodes pulsing in order of reported cycle life. No SMIL, no scripts, no fonts; under 1.5 MB.
+def _viridis(t):
+    s = [(68, 1, 84), (59, 82, 139), (33, 145, 140), (94, 201, 98), (253, 231, 37)]; t = max(0, min(1, t)) * 4; i = int(t); f = t - i; a = s[i]; b = s[min(i + 1, 4)]
+    return "#%02x%02x%02x" % tuple(int(a[k] + (b[k] - a[k]) * f) for k in range(3))
+PX, PY, PW, PH = 960, 70, 560, 380  # plot box
+def _x(dv): return PX + min(dv, 15) / 15 * PW
+def _y(eh): return PY + PH - min(eh * 1000, 150) / 150 * PH
+dots = "".join(f'<circle cx="{_x(m[1]):.1f}" cy="{_y(m[2]):.1f}" r="3.2" fill="{_viridis(m[4])}" opacity=".75"/>' for m in materials)
+CATC = {"A": "#22d3ee", "B": "#34d399", "C": "#f59e0b", "D": "#f87171"}
+vs = sorted(validation, key=lambda v: v["exp_cycles"])
+marks = ""; css = ""
+for i, v in enumerate(vs):
+    x, y = _x(v["dv"]), _y(v["eh"]); c = CATC[v["cat"]]
+    marks += f'<g class="vm m{i}"><circle class="halo" cx="{x:.1f}" cy="{y:.1f}" r="18" fill="{c}" opacity="0"/><circle cx="{x:.1f}" cy="{y:.1f}" r="6" fill="{c}" stroke="#0b1220" stroke-width="1.5"/><text x="{x + 10:.1f}" y="{y - 8:.1f}" class="vl">{v["name"]} · {v["exp_cycles"]:,} cycles</text></g>'
+    css += f".m{i} .halo,.m{i} .vl{{animation-delay:{i * 1.4:.1f}s}}\n"
+lines = [("2,774 electrodes", "screened from the Materials Project through an eight-layer funnel"), ("ρ = 0.76, p = 0.007", "Spearman rank of DSI classes against reported cycle life, 11 cathodes"),
+         (f"{n_correct} of 11", "cathodes on the correct side of the durable / non-durable split"), ("787 oxides", "with a complete DSI from their own discharged structure")]
+stat_svg = "".join(f'<g class="st s{i}"><text x="80" y="268" class="big">{a}</text><text x="80" y="300" class="small">{b}</text></g>' for i, (a, b) in enumerate(lines))
+loop = 1.4 * len(vs) + 1.0
+svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="1600" height="500" role="img" aria-label="CathodeAI: 787 screened cathodes plotted by volume change and charged-phase hull energy, coloured by Degradation Screening Index, with the eleven validation cathodes highlighted in turn">
+<style>
+.t{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}}
+.h{{font-size:54px;font-weight:800;fill:#e6edf3;letter-spacing:-1.5px}}.sub{{font-size:21px;fill:#8b98a9}}.big{{font-size:34px;font-weight:800;fill:#22d3ee}}.small{{font-size:16px;fill:#8b98a9}}.foot{{font-size:15px;fill:#5b6676}}.ax{{font-size:13px;fill:#8b98a9}}.vl{{font-size:13px;font-weight:700;fill:#e6edf3;opacity:0;animation:lab {loop}s infinite}}
+.halo{{animation:pulse {loop}s infinite}}
+@keyframes pulse{{0%{{opacity:0;r:6}}4%{{opacity:.55;r:14}}9%{{opacity:0;r:26}}100%{{opacity:0}}}}
+@keyframes lab{{0%{{opacity:0}}2%{{opacity:1}}9%{{opacity:1}}12%{{opacity:0}}100%{{opacity:0}}}}
+{css}
+.st{{opacity:0;animation:cycle 16s infinite}}.s1{{animation-delay:4s}}.s2{{animation-delay:8s}}.s3{{animation-delay:12s}}
+@keyframes cycle{{0%,22%{{opacity:1}}25%,97%{{opacity:0}}100%{{opacity:1}}}}
+@media (prefers-reduced-motion:reduce){{.halo,.vl,.st{{animation:none}}.vl{{opacity:1}}.s0{{opacity:1}}}}
+</style>
+<rect width="1600" height="500" fill="#0b1220"/>
+<g class="t">
+<text x="80" y="120" class="h">Structure predicts durability.</text><text x="80" y="178" class="h">Metal identity does not.</text>
+<text x="80" y="218" class="sub">CathodeAI: a three-descriptor Degradation Screening Index for Li-ion cathodes</text>
+{stat_svg}
+<text x="80" y="420" class="foot">Materials Project data · every number regenerated by reproduce.sh · preprint on ChemRxiv</text>
+<text x="80" y="446" class="foot">Right: 787 oxide cathodes, volume change against charged-phase hull energy, coloured by DSI · open the live page for the 3D fly-through</text>
+<rect x="{PX}" y="{PY}" width="{PW}" height="{PH}" fill="none" stroke="#1f2a3c"/>
+<text x="{PX + PW / 2}" y="{PY + PH + 28}" class="ax" text-anchor="middle">ΔV/V on delithiation, 0 → 15 % (clipped)</text>
+<text x="{PX - 12}" y="{PY + PH / 2}" class="ax" text-anchor="middle" transform="rotate(-90 {PX - 12} {PY + PH / 2})">E_hull of the charged phase, 0 → 150 meV/atom (clipped)</text>
+</g>
+{dots}
+<g class="t">{marks}</g>
+</svg>"""
+with open(os.path.join(OUT, "hero.svg"), "w", encoding="utf-8") as f: f.write(svg)
+print("wrote hero.svg", os.path.getsize(os.path.join(OUT, "hero.svg")), "bytes")

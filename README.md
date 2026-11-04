@@ -1,8 +1,8 @@
-<p align="center"><a href="https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/"><img src="docs/assets/hero.png" alt="CathodeAI live page: 3D scatter of 787 screened cathode materials coloured by Degradation Screening Index" width="100%"></a></p>
+<p align="center"><a href="https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/"><img src="docs/assets/hero.svg" alt="CathodeAI: 787 screened cathodes plotted by volume change and charged-phase hull energy, coloured by Degradation Screening Index, with the eleven validation cathodes highlighted in turn" width="100%"></a></p>
+
+<p align="center"><b><a href="https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/">Open the live page</a></b> · scroll-driven 3D: fly through the 787-cathode screen to the eleven validation cathodes, step through the LiCuO₂ polymorphs</p>
 
 <div align="center">
-
-### [▶ View the live page](https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/) · interactive 3D screen of 787 cathodes, the LiCuO₂ polymorphs, the funnel
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-0b1220?style=flat-square&logo=python&logoColor=22D3EE)](https://python.org)
 [![Data: Materials Project](https://img.shields.io/badge/Data-Materials%20Project-0b1220?style=flat-square&logoColor=22D3EE)](https://materialsproject.org)
