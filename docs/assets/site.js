@@ -4,7 +4,7 @@
   const root=document.documentElement, reduced=matchMedia('(prefers-reduced-motion:reduce)').matches, phone=matchMedia('(max-width:640px)').matches;
   const saved=(()=>{try{return localStorage.getItem('theme')}catch(e){return null}})(); if(saved) root.setAttribute('data-theme',saved);
   const isDark=()=>root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
-  function applyFigs(){const t=isDark()?'dark':'light';document.querySelectorAll('img[data-fig]').forEach(i=>{i.src=(i.dataset.dir||'assets/')+i.dataset.fig+'_'+t+(i.dataset.ext||'.svg')});document.dispatchEvent(new CustomEvent('themechange',{detail:{dark:isDark()}}))}
+  function applyFigs(){const t=isDark()?'dark':'light';document.querySelectorAll('img[data-fig]').forEach(i=>{const ext=i.dataset.ext?'.'+i.dataset.ext.replace(/^\./,''):'.svg';i.src=(i.dataset.dir||'assets/')+i.dataset.fig+'_'+t+ext});document.dispatchEvent(new CustomEvent('themechange',{detail:{dark:isDark()}}))}
   const btn=document.getElementById('themeBtn'); if(btn) btn.addEventListener('click',()=>{const n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}applyFigs()});
   matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyFigs); applyFigs();
 
