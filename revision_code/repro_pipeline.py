@@ -1,5 +1,5 @@
 """Reproduce the CathodeAI pipeline from cached Materials Project JSON.
-Mirrors copy_of_cathodeai_complete_clean.py sections 4-20, 25-27, 36, 43-49.
+Mirrors the original Colab pipeline's sections 4-20, 25-27, 36, 43-49.
 Writes pickles for downstream reviewer analyses and prints checks vs the
 original notebook outputs."""
 import json, re, warnings, pickle

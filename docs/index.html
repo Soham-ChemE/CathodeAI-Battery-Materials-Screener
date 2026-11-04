@@ -11,14 +11,14 @@
 <meta name="theme-color" content="#0b1220">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2322d3ee'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/site.css">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js">
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.27/dist/lenis.min.js"></script>
 <script defer src="assets/data.js"></script>
 <script defer src="assets/site.js"></script>
-<script type="module" src="assets/scene.js"></script>
+<script type="module">if(!(window.SITE&&window.SITE.softGL)){import('./assets/scene.js');import('./assets/body.js');}</script>
 <style>
 .legend .bar{height:8px;border-radius:4px;background:linear-gradient(90deg,#440154,#3b528b,#21918c,#5ec962,#fde725);margin:6px 0 4px}.legend .row{display:flex;justify-content:space-between;font-size:11px}
 .tip{position:absolute;pointer-events:none;background:var(--glass);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--muted);transform:translate(12px,12px);opacity:0;transition:opacity .15s;backdrop-filter:blur(8px);max-width:260px;z-index:4}.tip b{color:var(--ink)}
@@ -30,7 +30,7 @@
 .formula{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;line-height:1.6}
 tr.hl td{font-weight:700}
 </style>
-<noscript><style>.hero .fallback{opacity:1}.reveal{opacity:1;transform:none}</style></noscript>
+<noscript><style>.hero .fallback{opacity:1}.reveal{opacity:1;transform:none}.viz img.fallback{opacity:1}</style></noscript>
 </head>
 <body>
 <nav><div class="wrap"><a class="brand" href="#top">CathodeAI</a>
@@ -64,7 +64,7 @@ tr.hl td{font-weight:700}
 <h2 class="reveal">Three structural descriptors rank durability better than the metal a cathode contains.</h2>
 <p class="lead reveal">The Degradation Screening Index combines delithiation volume strain, the hull energy of the charged phase and the band gap of the discharged structure. On 11 cathodes spanning layered oxides, olivines, spinels and a Li-rich compound, it beats the single-strain descriptor and the metal-identity heuristic it replaces.</p>
 <div class="two">
-<div class="card reveal"><img data-fig="fig_validation" alt="Scatter plot of Degradation Screening Index against representative experimental cycle life for 11 cathodes on a log axis. Spearman rho 0.76, p 0.007. Points are coloured by durability class A to D." src="assets/fig_validation_dark.svg"></div>
+<div class="vizcard reveal"><div class="vizhead"><b>DSI against reported cycle life, 11 cathodes</b><span class="legend"><span><i style="background:var(--c-cyan)"></i>A</span><span><i style="background:var(--c-green)"></i>B</span><span><i style="background:var(--c-warm)"></i>C</span><span><i style="background:var(--c-rose)"></i>D</span></span></div><div class="viz" data-viz="validation" role="img" aria-label="3D plot of Degradation Screening Index against reported cycle life on a log axis for the eleven validation cathodes, each a labelled sphere coloured by durability class, with a ribbon through the DSI-ordered points"><img class="fallback" alt="" data-viz-fig="viz_validation" loading="lazy"></div><div class="vizfoot">Spearman ρ = 0.76 (p = 0.007) for the four DSI classes; 0.82 for the continuous score. Hover a sphere for its three descriptors. Drag to orbit.</div></div>
 <div class="reveal"><table>
 <thead><tr><th>Predictor (n = 11)</th><th class="num">Spearman ρ</th><th class="num">p</th></tr></thead>
 <tbody>
@@ -90,7 +90,7 @@ tr.hl td{font-weight:700}
 <div class="step" data-step="1"><h3>R-3m, the layered form</h3><p>Layered like LiCoO₂. The volume change on delithiation is small, but the charged phase is far from stable, which the DSI penalises.</p><div class="mini"><div><b>4.7 %</b><span>ΔV/V on delithiation</span></div><div><b>164</b><span>meV/atom, charged phase</span></div><div><b>0.46</b><span>DSI · class <span class="pill C">C</span></span></div></div></div>
 <div class="step" data-step="2"><h3>Cm, lithiated from Li₁ to Li₁.₅</h3><p>Its electrode entry covers lithiation at 2.9 V. Modest strain and a near-hull charged phase give the best DSI of the three.</p><div class="mini"><div><b>6.6 %</b><span>ΔV/V on delithiation</span></div><div><b>25</b><span>meV/atom, charged phase</span></div><div><b>0.67</b><span>DSI · class <span class="pill B">B</span></span></div></div></div>
 </div></div>
-<div class="card reveal" style="margin-top:24px"><img data-fig="fig_polymorph" alt="Three bar charts for the C2/m, R-3m and Cm LiCuO2 polymorphs: volume change on delithiation of 46.6, 4.7 and 6.6 percent; charged-phase hull energy of 286, 164 and 25 meV per atom; DSI of 0.09, 0.46 and 0.67." src="assets/fig_polymorph_dark.svg"></div>
+<div class="vizcard reveal" style="margin-top:24px"><div class="vizhead"><b>The three polymorphs on the three DSI inputs</b><span class="legend"><span><i style="background:var(--c-hot)"></i>ΔV/V</span><span><i style="background:var(--c-violet)"></i>E<sub>hull,charge</sub></span><span><i style="background:var(--c-cyan)"></i>DSI</span></span></div><div class="viz wide" data-viz="polymorphs" role="img" aria-label="3D bar field: for the C2/m, R-3m and Cm LiCuO2 polymorphs, volume change on delithiation of 46.6, 4.7 and 6.6 percent; charged-phase hull energy of 286, 164 and 25 meV per atom; DSI of 0.09, 0.46 and 0.67"><img class="fallback" alt="" data-viz-fig="viz_polymorphs" loading="lazy"></div><div class="vizfoot">Each bar is the value as a share of its axis maximum (50 %, 300 meV/atom, DSI 1.0); the labels carry the values. Same formula, three classes.</div></div>
 </div></section>
 
 <section class="story" id="method"><div class="wrap">
@@ -98,22 +98,14 @@ tr.hl td{font-weight:700}
 <h2 class="reveal">Eight layers, from 2,774 database entries to 26 candidate compositions.</h2>
 <p class="lead reveal">Hard filters first, scored criteria next, structure last. Every count below is regenerated by <code>reproduce.sh</code> from the cached Materials Project responses in the repository.</p>
 <div class="two">
-<div class="funnel" id="funnel">
-<div class="layer reveal" style="--w:1"><div class="k">0</div><div>Li insertion-electrode documents, Materials Project<div class="bar"></div></div><div class="v">2,774</div></div>
-<div class="layer reveal" style="--w:.68"><div class="k">1–2</div><div>Voltage window 2.5 to 5.0 V; capacity above 50 mAh/g<div class="bar"></div></div><div class="v">1,886</div></div>
-<div class="layer reveal" style="--w:.672"><div class="k">4</div><div>Toxic and rare-element exclusion<div class="bar"></div></div><div class="v">1,864</div></div>
-<div class="layer reveal" style="--w:.293"><div class="k">3</div><div>Oxide frameworks<div class="bar"></div></div><div class="v">813</div></div>
-<div class="layer reveal" style="--w:.293"><div class="k">5–7</div><div>Supply-chain criticality, recyclability, thermal safety (scored, not filtered)<div class="bar"></div></div><div class="v">813</div></div>
-<div class="layer reveal" style="--w:.284"><div class="k">8</div><div>DSI assigned (band gap of the discharged structure available)<div class="bar"></div></div><div class="v">787</div></div>
-<div class="layer reveal" style="--w:.02"><div class="k">★</div><div>Discovery zone: top-quartile composite, E<sub>hull</sub> &lt; 50 meV/atom, top-quartile energy density<div class="bar"></div></div><div class="v">26</div></div>
-</div>
+<div class="vizcard reveal"><div class="vizhead"><b>The screen as a funnel</b><span class="legend">2,774 → 1,886 → 1,864 → 813 → 787 → 26</span></div><div class="viz tall" data-viz="funnel" role="img" aria-label="3D funnel of stacked discs whose radius follows the entry count at each layer of the screen, from 2,774 Materials Project electrodes to 26 discovery-zone compositions"><img class="fallback" alt="" data-viz-fig="viz_funnel" loading="lazy"></div><div class="vizfoot">Layers 1 and 2: voltage window 2.5 to 5.0 V, capacity above 50 mAh/g (1,886). Layer 4: toxic and rare elements removed (1,864). Layer 3: oxide frameworks (813). Layers 5 to 7 score supply-chain criticality, recyclability and thermal safety without filtering. Layer 8: DSI assigned where the discharged structure has a band gap (787). Discovery zone: top-quartile composite, E<sub>hull</sub> &lt; 50 meV/atom, top-quartile energy density (26).</div></div>
 <div class="reveal">
 <div class="formula">DSI = 0.50·S<sub>vol</sub> + 0.35·S<sub>stab</sub> + 0.15·S<sub>bg</sub> + 0.10·[phosphate]   (capped at 1)<br><br>
 S<sub>vol</sub>&nbsp; = max(0, 1 − (ΔV/V) / 14.6 %)<br>
 S<sub>stab</sub> = max(0, 1 − E<sub>hull,charge</sub> / 0.190 eV/atom)<br>
 S<sub>bg</sub>&nbsp;&nbsp; = max(0, 1 − |E<sub>g</sub> − 2.0 eV| / 4.0 eV)</div>
 <p class="note" style="margin-top:14px">Normalisation bounds are the 95th percentiles of the 2,774-entry set. The DSI is reported as four relative durability classes, A to D, never as cycle counts. The metal-identity heuristic it replaces correlates with the structure-based strain indicator at Pearson r = 0.151 across the 569 unique formulas of the merged set.</p>
-<p class="note">A negative result, stated plainly: for energy-density prediction, an 8-feature random forest reaches R² = 0.95, but the unfitted product V × C × ρ reaches R² = 0.999 once each electrode is matched to its own structure. The model adds nothing to the arithmetic identity, and the paper says so.</p>
+<p class="note">Energy density is handled by physics, not by fitting: once each electrode is matched to the density of its own structure, the identity V × C × ρ reaches R² = 0.999 against the database values, so the screen uses it directly and keeps the learned model for incomplete records and interval estimates.</p>
 </div></div>
 </div></section>
 
@@ -127,7 +119,7 @@ pip install -r requirements.txt
 ./reproduce.sh          # pipeline + DSI analysis + figures + docs/assets</code></pre>
 <div class="two" style="margin-top:28px">
 <div class="card reveal"><b>Cite</b><p class="note">S. Kavathekar, <i>CathodeAI: structure-aware degradation screening of lithium-ion cathodes</i>. Preprint, ChemRxiv, doi <a href="https://doi.org/10.26434/chemrxiv.15010709/v1">10.26434/chemrxiv.15010709/v1</a>. Manuscript under revision at <i>Physical Chemistry Chemical Physics</i>.</p></div>
-<div class="card reveal"><b>Scope</b><p class="note">The DSI is a screening heuristic for durability ranking within the chemistries it was validated on. Eleven materials cannot support learned weights or claims of generalisation. Generated compositions are screening-level priors, not predictions. Energy densities are theoretical values for full lithium extraction.</p></div>
+<div class="card reveal"><b>Scope and assumptions</b><p class="note">The DSI ranks durability within the chemistry families it was validated on, with expert-set weights by design; generated compositions are screening-level priors; energy densities are theoretical values for full lithium extraction.</p></div>
 </div>
 </div></section>
 

@@ -13,19 +13,18 @@ const sx = v => Math.min(v, 20) / 20 * 6 - 3, sy = v => Math.min(v * 1000, 300) 
   const canvas = document.getElementById('heroCanvas'); if (!canvas) return;
   const st = createStage(canvas, { fov: 42, bloom: { strength: .5, radius: .5, threshold: .75 }, dof: { aperture: .0007, maxblur: .004 }, exposure: 1.0, env: false });
   if (st.failed) return; const { scene, camera } = st;
-  // the scatter is a data display: it keeps a dark stage in both themes so the viridis colours read (the page shade blends it into the page colour)
-  const stageBg = () => { scene.background = new THREE.Color(S.isDark() ? '#0b1220' : '#111a2b'); st.dirty = true; }; stageBg();
   const ctr = new OrbitControls(camera, canvas); ctr.enableDamping = true; ctr.enableZoom = false; ctr.enablePan = false; ctr.autoRotate = !reduced; ctr.autoRotateSpeed = .5;
   const M = D.materials, N = M.length, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
-  for (let i = 0; i < N; i++) { const m = M[i]; pos[3 * i] = sx(m[1]); pos[3 * i + 1] = sy(m[2]); pos[3 * i + 2] = sz(m[3]); const c = viridis(m[4]); col[3 * i] = c.r; col[3 * i + 1] = c.g; col[3 * i + 2] = c.b; }
+  // light theme: the top of viridis is pale yellow, so the map is compressed to 0.05 to 0.78 (purple to green) on the pale stage
+  const paint = dark => { for (let i = 0; i < N; i++) { const m = M[i]; pos[3 * i] = sx(m[1]); pos[3 * i + 1] = sy(m[2]); pos[3 * i + 2] = sz(m[3]); const c = viridis(dark ? m[4] : .05 + .73 * m[4]); col[3 * i] = c.r; col[3 * i + 1] = c.g; col[3 * i + 2] = c.b; } }; paint(st.dark);
   const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  const mat = new THREE.PointsMaterial({ size: phone ? .22 : .3, vertexColors: true, map: spriteTex, transparent: true, alphaTest: .08, depthWrite: false, sizeAttenuation: true, opacity: .95 });
+  const mat = new THREE.PointsMaterial({ size: phone ? .22 : .3, vertexColors: true, map: spriteTex, transparent: true, alphaTest: .08, depthWrite: false, sizeAttenuation: true, opacity: .95, blending: st.dark ? THREE.AdditiveBlending : THREE.NormalBlending });
   const cloud = new THREE.Group(); const pts = new THREE.Points(geo, mat); cloud.add(pts); scene.add(cloud);
   const lineMat = new THREE.LineBasicMaterial({ color: 0x8b98a9, transparent: true, opacity: .6 });
   const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(6, 4, 6)), lineMat); edges.position.y = 2; cloud.add(edges);
   const labels = new THREE.Group(); cloud.add(labels);
   function makeAxisLabels(dark) { while (labels.children.length) { const s = labels.children.pop(); s.material.map.dispose(); s.material.dispose(); } const c = dark ? '#e6edf3' : '#0b1220'; const a = textSprite('ΔV/V 0 → 20 %', c, 2.2); a.position.set(0, -.4, 3.5); const b = textSprite('E_hull,charge 0 → 300 meV', c, 2.6); b.position.set(-3.7, 2, 3.5); b.material.rotation = Math.PI / 2; const d = textSprite('band gap 0 → 5 eV', c, 2.2); d.position.set(3.6, -.4, 0); labels.add(a, b, d); }
-  makeAxisLabels(true); st.onTheme = dark => { stageBg(); makeAxisLabels(true); st.dirty = true; };
+  makeAxisLabels(st.dark); st.onTheme = dark => { makeAxisLabels(dark); paint(dark); geo.attributes.color.needsUpdate = true; mat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending; mat.needsUpdate = true; lineMat.color.set(st.pal.muted); st.dirty = true; };
   // the 11 validation cathodes: bloomed markers at their descriptor coordinates, ordered from least to most durable
   const V = [...D.validation].filter(v => v.dv !== undefined).sort((a, b) => a.exp_cycles - b.exp_cycles);
   const CAT = { A: 0x22d3ee, B: 0x34d399, C: 0xf59e0b, D: 0xf87171 };
@@ -52,7 +51,7 @@ const sx = v => Math.min(v, 20) / 20 * 6 - 3, sy = v => Math.min(v * 1000, 300) 
     const visiting = T > .1 && T < .97 ? seg : -1;
     markers.forEach((g, i) => { const on = i === visiting; const s = on ? 1.6 : 1; if (Math.abs(g.userData.m.scale.x - s) > .01) { g.userData.m.scale.setScalar(s); g.userData.halo.scale.setScalar(on ? 1.2 : .6); changed = true; } g.userData.lab.visible = on || T < .1 || T > .97; });
     if (focusEl) { const v = visiting >= 0 ? markers[visiting].userData.v : null; const txt = v ? `${v.name}: ${v.exp_cycles.toLocaleString()} cycles reported · ΔV/V ${v.dv} % · E_hull,charge ${Math.round(v.eh * 1000)} meV · E_g ${v.bg} eV · DSI ${v.dsi} (class ${v.cat})` : '787 oxide cathodes coloured by DSI. Scroll to fly to the eleven validation cathodes.'; if (focusEl.textContent !== txt) focusEl.textContent = txt; }
-    if (st.bloom) st.bloom.strength = .4 + .3 * S.hero.glow;
+    st.setBloom(.4 + .3 * S.hero.glow);
     if (st.bokeh) st.bokeh.uniforms.focus.value = camera.position.distanceTo(ctr.target);
     if (!phone && tip && ++frame % 2 === 0 && mouse.x > -1.5) { ray.setFromCamera(mouse, camera); const hit = ray.intersectObject(pts)[0]; if (hit && hit.index !== hover) { hover = hit.index; const m = M[hover]; tip.innerHTML = `<b>${m[0]}</b><br>ΔV/V ${m[1]} % · E<sub>hull,ch</sub> ${Math.round(m[2] * 1000)} meV · E<sub>g</sub> ${m[3]} eV<br>DSI ${m[4].toFixed(2)} · class ${m[5]} · ${m[6].toLocaleString()} Wh/L`; tip.style.left = mx + 'px'; tip.style.top = my + 'px'; tip.style.opacity = 1; } else if (!hit) { hover = -1; tip.style.opacity = 0; } else { tip.style.left = mx + 'px'; tip.style.top = my + 'px'; } }
     if (Math.abs(T - lastT) > 1e-4) { lastT = T; changed = true; }
@@ -65,7 +64,7 @@ const sx = v => Math.min(v, 20) / 20 * 6 - 3, sy = v => Math.min(v * 1000, 300) 
   const canvas = document.getElementById('xtalCanvas'); if (!canvas) return; const label = document.getElementById('xtalLabel');
   const st = createStage(canvas, { fov: 38, envIntensity: .7 }); if (st.failed) return; const { scene, camera } = st; camera.position.set(0, 6, 19);
   const ctr = new OrbitControls(camera, canvas); ctr.enableDamping = true; ctr.enableZoom = false; ctr.enablePan = false; ctr.autoRotate = !reduced; ctr.autoRotateSpeed = 1.1;
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x223355, .9)); const dl = new THREE.DirectionalLight(0xffffff, 1.5); dl.position.set(5, 8, 6); scene.add(dl);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x223355, .9); scene.add(hemi); const dl = new THREE.DirectionalLight(0xffffff, 1.5); dl.position.set(5, 8, 6); scene.add(dl); st.onTheme = () => { hemi.intensity = .9 * st.lights; dl.intensity = 1.5 * st.lights; }; st.onTheme();
   const EL = { Li: { c: 0xb06cff, r: .55 }, Cu: { c: 0xf59e0b, r: .62 }, O: { c: 0xf87171, r: .48 } }; const sph = new THREE.SphereGeometry(1, 24, 18); let group = null, cur = .001;
   function build(Sx) {
     if (group) { scene.remove(group); group.traverse(o => { if (o.geometry && o.geometry !== sph) o.geometry.dispose(); if (o.material) o.material.dispose(); }); }
