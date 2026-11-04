@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CathodeAI</title>
+<meta name="description" content="Structure-aware degradation screening of 2,774 lithium-ion cathodes from the Materials Project. A three-descriptor Degradation Screening Index validated on 11 experimental cathodes.">
+<meta property="og:title" content="CathodeAI: structure predicts cathode durability">
+<meta property="og:description" content="2,774 Materials Project electrodes screened. DSI ranks 11 experimental cathodes at Spearman rho 0.76 versus 0.55 for volume strain alone.">
+<meta property="og:image" content="https://soham-cheme.github.io/CathodeAI-Battery-Materials-Screener/assets/social-preview.png">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2322d3ee'/%3E%3C/svg%3E">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+:root{--bg:#f6f8fb;--bg2:#ffffff;--ink:#0b1220;--muted:#5b6676;--line:#dfe5ee;--acc:#0891b2;--acc2:#d97706;--card:#ffffff;--glow:rgba(8,145,178,.18);--A:#0891b2;--B:#059669;--C:#d97706;--D:#dc2626;--shadow:0 10px 40px rgba(11,18,32,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--bg2:#0f172a;--ink:#e6edf3;--muted:#8b98a9;--line:#1f2a3c;--acc:#22d3ee;--acc2:#f59e0b;--card:#111a2b;--glow:rgba(34,211,238,.22);--A:#22d3ee;--B:#34d399;--C:#f59e0b;--D:#f87171;--shadow:0 10px 40px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0b1220;--bg2:#0f172a;--ink:#e6edf3;--muted:#8b98a9;--line:#1f2a3c;--acc:#22d3ee;--acc2:#f59e0b;--card:#111a2b;--glow:rgba(34,211,238,.22);--A:#22d3ee;--B:#34d399;--C:#f59e0b;--D:#f87171;--shadow:0 10px 40px rgba(0,0,0,.4)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:52px}
+nav .brand{font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+nav .links{display:flex;gap:16px;margin-left:auto;font-size:14px}
+nav .links a{color:var(--muted)}nav .links a:hover{color:var(--ink);text-decoration:none}
+@media (max-width:640px){nav .links a.hide-sm{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:600;font-size:15px;border:0;cursor:pointer}
+.btn:hover{text-decoration:none;opacity:.9}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:15px}
+/* hero */
+.hero-track{height:190vh;position:relative}
+.hero{position:sticky;top:0;height:100vh;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 35%,color-mix(in srgb,var(--bg) 78%,transparent) 72%,var(--bg) 100%)}
+.hero .copy{position:absolute;left:0;right:0;bottom:12vh;pointer-events:none}
+.hero h1{font-size:clamp(34px,6vw,76px);line-height:1.02;letter-spacing:-.03em;margin:0 0 14px;max-width:14ch;font-weight:800}
+.hero p{font-size:clamp(16px,1.6vw,21px);color:var(--muted);max-width:52ch;margin:0 0 22px}
+.hero .cta{pointer-events:auto;display:flex;gap:12px;flex-wrap:wrap}
+.hero .tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:8px 10px;border-radius:10px;font-size:13px;box-shadow:var(--shadow);transform:translate(12px,12px);opacity:0;transition:opacity .15s}
+.hero .legend{position:absolute;right:16px;top:70px;font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--card) 80%,transparent);border:1px solid var(--line);border-radius:12px;padding:10px 12px;backdrop-filter:blur(8px)}
+.hero .legend .bar{height:8px;border-radius:4px;background:linear-gradient(90deg,#440154,#31688e,#35b779,#fde725);margin:6px 0 2px}
+.hero .legend .row{display:flex;justify-content:space-between}
+.scrollhint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+@media (max-width:640px){.hero .legend{top:62px;right:auto;left:12px;padding:8px;font-size:11px;max-width:200px}.hero .copy{bottom:8vh}.hero-track{height:170vh}}
+/* stats */
+.stats{position:relative;z-index:2;background:var(--bg);border-top:1px solid var(--line)}
+.stats .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:44px 0}
+@media (max-width:760px){.stats .grid{grid-template-columns:repeat(2,1fr)}}
+.stat .n{font-size:clamp(34px,4.6vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--ink)}
+.stat .n small{font-size:.5em;color:var(--muted);font-weight:600;margin-left:4px}
+.stat .l{color:var(--muted);font-size:14px;margin-top:8px}
+/* sections */
+section.story{position:relative;z-index:2;background:var(--bg);padding:84px 0}
+section.story.alt{background:var(--bg2)}
+.eyebrow{color:var(--acc);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;margin-bottom:12px}
+h2{font-size:clamp(28px,4vw,48px);letter-spacing:-.03em;line-height:1.08;margin:0 0 18px;max-width:22ch}
+.lead{font-size:clamp(17px,1.5vw,20px);color:var(--muted);max-width:60ch;margin:0 0 28px}
+.two{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.card img{width:100%;height:auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600;font-size:13px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.hl td{color:var(--acc);font-weight:700}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;color:#0b1220}
+.pill.A{background:var(--A)}.pill.B{background:var(--B)}.pill.C{background:var(--C)}.pill.D{background:var(--D);color:#fff}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+/* sticky method */
+.sticky-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media (max-width:820px){.sticky-wrap{grid-template-columns:1fr}}
+.sticky-fig{position:sticky;top:72px;height:min(70vh,560px);border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.sticky-fig canvas{width:100%;height:100%;display:block}
+.sticky-fig .label{position:absolute;left:16px;top:14px;font-size:13px;color:var(--muted)}
+.sticky-fig .label b{color:var(--ink);font-size:18px;display:block;letter-spacing:-.01em}
+.sticky-fig .key{position:absolute;right:14px;bottom:12px;font-size:12px;color:var(--muted);display:flex;gap:10px}
+.sticky-fig .key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+.steps{display:flex;flex-direction:column;gap:38vh;padding:18vh 0 30vh}
+@media (max-width:820px){.sticky-fig{height:46vh;top:60px}.steps{gap:22vh;padding:6vh 0 14vh}}
+.step{opacity:.35;transition:opacity .4s}.step.active{opacity:1}
+.step h3{font-size:clamp(22px,2.6vw,32px);letter-spacing:-.02em;margin:0 0 10px}
+.step p{color:var(--muted);margin:0 0 12px;font-size:17px}
+.step .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.step .mini div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+.step .mini b{display:block;font-size:20px;letter-spacing:-.02em}.step .mini span{font-size:12px;color:var(--muted)}
+/* funnel */
+.funnel{display:flex;flex-direction:column;gap:10px}
+.layer{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.layer .k{font-weight:800;color:var(--acc);font-size:14px}
+.layer .v{font-weight:800;font-variant-numeric:tabular-nums;font-size:20px;letter-spacing:-.02em}
+.layer .bar{height:4px;border-radius:2px;background:var(--acc);margin-top:8px;transform-origin:left;transform:scaleX(0);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.layer.in .bar{transform:scaleX(var(--w))}
+@media (prefers-reduced-motion:reduce){.layer .bar{transform:scaleX(var(--w))}}
+pre{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto;font-size:13.5px;line-height:1.55}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto}
+footer{position:relative;z-index:2;background:var(--bg2);border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+.note{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><a class="brand" href="#top">CathodeAI</a>
+<div class="links"><a href="#results">Results</a><a href="#polymorphs" class="hide-sm">Polymorphs</a><a href="#method">Method</a><a href="#run" class="hide-sm">Run it</a><a href="https://github.com/Soham-ChemE/CathodeAI-Battery-Materials-Screener">GitHub</a></div>
+<button class="toggle" id="themeBtn" aria-label="Toggle dark or light theme" title="Toggle theme">◐</button></div></nav>
+
+<div class="hero-track" id="top"><div class="hero">
+<canvas id="heroCanvas" aria-label="Interactive 3D scatter of 787 screened cathode materials: delithiation volume change, charged-phase hull energy and band gap, coloured by Degradation Screening Index" role="img"></canvas>
+<div class="legend" aria-hidden="true">Degradation Screening Index<div class="bar"></div><div class="row"><span>0 (low)</span><span>1 (high)</span></div><div style="margin-top:6px">787 oxide cathodes · drag to rotate</div></div>
+<div class="shade"></div>
+<div class="tip" id="tip"></div>
+<div class="copy"><div class="wrap">
+<h1>Structure predicts durability. Metal identity does not.</h1>
+<p>2,774 lithium-ion insertion electrodes from the Materials Project, screened through an eight-layer funnel and ranked by a three-descriptor Degradation Screening Index that is validated against 11 experimentally characterised cathodes.</p>
+<div class="cta"><a class="btn" href="#results">See the results</a><a class="btn ghost" href="https://github.com/Soham-ChemE/CathodeAI-Battery-Materials-Screener">Source and data</a></div>
+</div></div>
+<div class="scrollhint">Scroll</div>
+</div></div>
+
+<div class="stats"><div class="wrap"><div class="grid">
+<div class="stat reveal"><div class="n" data-count="2774" data-format="int">0</div><div class="l">Li insertion electrodes screened from the Materials Project</div></div>
+<div class="stat reveal d1"><div class="n" data-count="0.76" data-format="2">0.00</div><div class="l">Spearman rho of DSI classes against experimental cycle life, 11 cathodes (p = 0.007)</div></div>
+<div class="stat reveal d2"><div class="n"><span data-count="10" data-format="int">0</span><small>of 11</small></div><div class="l">cathodes on the correct side of the durable / non-durable split</div></div>
+<div class="stat reveal d3"><div class="n" data-count="787" data-format="int">0</div><div class="l">oxide cathodes with a complete DSI from their own discharged structure</div></div>
+</div></div></div>
+
+<section class="story" id="results"><div class="wrap">
+<div class="eyebrow reveal">01 · Validation</div>
+<h2 class="reveal">Three structural descriptors rank durability better than the metal a cathode contains.</h2>
+<p class="lead reveal">The Degradation Screening Index combines delithiation volume strain, the hull energy of the charged phase and the band gap of the discharged structure. On 11 cathodes spanning layered oxides, olivines, spinels and a Li-rich compound, it beats the single-strain descriptor and the metal-identity heuristic it replaces.</p>
+<div class="two">
+<div class="card reveal"><img data-fig="fig_validation" alt="Scatter plot of Degradation Screening Index against representative experimental cycle life for 11 cathodes on a log axis. Spearman rho 0.76, p 0.007. Points are coloured by durability class A to D." src="assets/fig_validation_dark.svg"></div>
+<div class="reveal d1"><table>
+<thead><tr><th>Predictor (n = 11)</th><th class="num">Spearman ρ</th><th class="num">p</th></tr></thead>
+<tbody>
+<tr class="hl"><td>Structure-resolved DSI, four classes</td><td class="num">0.76</td><td class="num">0.007</td></tr>
+<tr><td>DSI, continuous score</td><td class="num">0.82</td><td class="num">0.002</td></tr>
+<tr><td>Volume strain alone, same binning</td><td class="num">0.55</td><td class="num">0.08</td></tr>
+<tr><td>Metal-identity heuristic</td><td class="num">0.55</td><td class="num">0.08</td></tr>
+</tbody></table>
+<p class="note" style="margin-top:14px">Robust to leaving any one material out (DSI ahead in 11 of 11 iterations), to removing LTO (ρ = 0.77), and to 24 meV/atom Gaussian noise on the DFT hull energies (median ρ unchanged at 0.76). Bootstrap 95 % CI [0.51, 0.93]. Weights are expert-set, not learned: nested leave-one-out weight fitting on 11 materials collapses to ρ = 0.18.</p></div>
+</div>
+</div></section>
+
+<section class="story alt" id="polymorphs"><div class="wrap">
+<div class="eyebrow reveal">02 · One composition, three durability classes</div>
+<h2 class="reveal">LiCuO₂ has eight polymorphs in the Materials Project. Three are electrode end-members, and they land in three different classes.</h2>
+<p class="lead reveal">A composition heuristic gives all three the same number. The DSI reads what each structure does when lithium leaves. The structures below are the cached Materials Project entries, drawn as 2 × 2 × 2 supercells.</p>
+<div class="sticky-wrap">
+<div class="sticky-fig"><canvas id="xtalCanvas" aria-label="Rotating 3D crystal structure of a LiCuO2 polymorph from the Materials Project" role="img"></canvas>
+<div class="label" id="xtalLabel"><b>C2/m</b>ground state · mp entry</div>
+<div class="key" aria-hidden="true"><span><i style="background:#b06cff"></i>Li</span><span><i style="background:#f59e0b"></i>Cu</span><span><i style="background:#f87171"></i>O</span></div></div>
+<div class="steps" id="steps">
+<div class="step active" data-xtal="0"><h3>C2/m, the ground state</h3><p>Lowest energy, so a database search by stability picks it first. Pull the lithium out and the lattice collapses by almost half its volume; the charged phase sits 286 meV/atom above the hull.</p><div class="mini"><div><b>46.6 %</b><span>ΔV/V on delithiation</span></div><div><b>286</b><span>meV/atom, charged phase</span></div><div><b>0.09</b><span>DSI · class <span class="pill D">D</span></span></div></div></div>
+<div class="step" data-xtal="1"><h3>R-3m, the layered form</h3><p>Layered like LiCoO₂. The volume change on delithiation is small, but the charged phase is far from stable, which the DSI penalises.</p><div class="mini"><div><b>4.7 %</b><span>ΔV/V on delithiation</span></div><div><b>164</b><span>meV/atom, charged phase</span></div><div><b>0.46</b><span>DSI · class <span class="pill C">C</span></span></div></div></div>
+<div class="step" data-xtal="2"><h3>Cm, lithiated from Li₁ to Li₁.₅</h3><p>Its electrode entry covers lithiation at 2.9 V. Modest strain and a near-hull charged phase give the best DSI of the three.</p><div class="mini"><div><b>6.6 %</b><span>ΔV/V on delithiation</span></div><div><b>25</b><span>meV/atom, charged phase</span></div><div><b>0.67</b><span>DSI · class <span class="pill B">B</span></span></div></div></div>
+</div></div>
+<div class="card reveal" style="margin-top:24px"><img data-fig="fig_polymorph" alt="Three bar charts for the C2/m, R-3m and Cm LiCuO2 polymorphs: volume change on delithiation of 46.6, 4.7 and 6.6 percent; charged-phase hull energy of 286, 164 and 25 meV per atom; DSI of 0.09, 0.46 and 0.67." src="assets/fig_polymorph_dark.svg"></div>
+</div></section>
+
+<section class="story" id="method"><div class="wrap">
+<div class="eyebrow reveal">03 · The screen</div>
+<h2 class="reveal">Eight layers, from 2,774 database entries to 26 candidate compositions.</h2>
+<p class="lead reveal">Hard filters first, scored criteria next, structure last. Every count below is regenerated by <code>reproduce.sh</code> from the cached Materials Project responses in the repository.</p>
+<div class="two">
+<div class="funnel" id="funnel">
+<div class="layer reveal" style="--w:1"><div class="k">0</div><div>Li insertion-electrode documents, Materials Project<div class="bar"></div></div><div class="v">2,774</div></div>
+<div class="layer reveal d1" style="--w:.68"><div class="k">1–2</div><div>Voltage window 2.5 to 5.0 V; capacity above 50 mAh/g<div class="bar"></div></div><div class="v">1,886</div></div>
+<div class="layer reveal d1" style="--w:.672"><div class="k">4</div><div>Toxic and rare-element exclusion<div class="bar"></div></div><div class="v">1,864</div></div>
+<div class="layer reveal d2" style="--w:.293"><div class="k">3</div><div>Oxide frameworks<div class="bar"></div></div><div class="v">813</div></div>
+<div class="layer reveal d2" style="--w:.293"><div class="k">5–7</div><div>Supply-chain criticality, recyclability, thermal safety (scored, not filtered)<div class="bar"></div></div><div class="v">813</div></div>
+<div class="layer reveal d3" style="--w:.284"><div class="k">8</div><div>DSI assigned (band gap of the discharged structure available)<div class="bar"></div></div><div class="v">787</div></div>
+<div class="layer reveal d3" style="--w:.02"><div class="k">★</div><div>Discovery zone: top-quartile composite, E<sub>hull</sub> &lt; 50 meV/atom, top-quartile energy density<div class="bar"></div></div><div class="v">26</div></div>
+</div>
+<div class="reveal d2">
+<div class="formula">DSI = 0.50·S<sub>vol</sub> + 0.35·S<sub>stab</sub> + 0.15·S<sub>bg</sub> + 0.10·[phosphate]   (capped at 1)<br><br>
+S<sub>vol</sub>&nbsp; = max(0, 1 − (ΔV/V) / 14.6 %)<br>
+S<sub>stab</sub> = max(0, 1 − E<sub>hull,charge</sub> / 0.190 eV/atom)<br>
+S<sub>bg</sub>&nbsp;&nbsp; = max(0, 1 − |E<sub>g</sub> − 2.0 eV| / 4.0 eV)</div>
+<p class="note" style="margin-top:14px">Normalisation bounds are the 95th percentiles of the 2,774-entry set. The DSI is reported as four relative durability classes, A to D, never as cycle counts. The metal-identity heuristic it replaces correlates with the structure-based strain indicator at Pearson r = 0.151 across the 569 unique formulas of the merged set.</p>
+<p class="note">A negative result, stated plainly: for energy-density prediction, an 8-feature random forest reaches R² = 0.95, but the unfitted product V × C × ρ reaches R² = 0.999 once each electrode is matched to its own structure. The model adds nothing to the arithmetic identity, and the paper says so.</p>
+</div></div>
+</div></section>
+
+<section class="story alt" id="run"><div class="wrap">
+<div class="eyebrow reveal">04 · Reproduce it</div>
+<h2 class="reveal">Every number on this page comes out of one script.</h2>
+<p class="lead reveal">No API key is needed: the Materials Project responses are cached in the repository. The pipeline, the identifier-level merge, the DSI analysis and the figures take about two minutes on a laptop.</p>
+<pre class="reveal"><code>git clone https://github.com/Soham-ChemE/CathodeAI-Battery-Materials-Screener.git
+cd CathodeAI-Battery-Materials-Screener
+pip install -r requirements.txt
+./reproduce.sh          # pipeline + DSI analysis + figures + docs/assets</code></pre>
+<div class="two" style="margin-top:28px">
+<div class="card reveal"><b>Cite</b><p class="note">S. Kavathekar, <i>CathodeAI: structure-aware degradation screening of lithium-ion cathodes</i>. Preprint, ChemRxiv, doi <a href="https://doi.org/10.26434/chemrxiv.15010709/v1">10.26434/chemrxiv.15010709/v1</a>. Manuscript under revision at <i>Physical Chemistry Chemical Physics</i>.</p></div>
+<div class="card reveal d1"><b>Scope</b><p class="note">The DSI is a screening heuristic for durability ranking within the chemistries it was validated on. Eleven materials cannot support learned weights or claims of generalisation. Generated compositions are screening-level priors, not predictions. Energy densities are theoretical values for full lithium extraction.</p></div>
+</div>
+</div></section>
+
+<footer><div class="wrap"><div><b style="color:var(--ink)">Soham Kavathekar</b> · MS Chemical &amp; Biomolecular Engineering, University of Pennsylvania<br><a href="mailto:stg3719@seas.upenn.edu">stg3719@seas.upenn.edu</a> · <a href="https://www.linkedin.com/in/soham-kavathekar-cheme">linkedin.com/in/soham-kavathekar-cheme</a> · <a href="https://github.com/Soham-ChemE">github.com/Soham-ChemE</a></div><div>Data: <a href="https://materialsproject.org">Materials Project</a> · MIT License · Three.js r160</div></div></footer>
+
+<script src="assets/data.js"></script>
+<script>
+// ---------- theme, reveal, counters, figure swapping (no dependencies) ----------
+(function(){
+  const root=document.documentElement, btn=document.getElementById('themeBtn');
+  const saved=(()=>{try{return localStorage.getItem('theme')}catch(e){return null}})();
+  if(saved) root.setAttribute('data-theme',saved);
+  const isDark=()=>root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
+  function applyFigs(){const t=isDark()?'dark':'light';document.querySelectorAll('img[data-fig]').forEach(i=>{i.src='assets/'+i.dataset.fig+'_'+t+'.svg'});document.dispatchEvent(new CustomEvent('themechange',{detail:{dark:isDark()}}))}
+  btn.addEventListener('click',()=>{const n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}applyFigs()});
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyFigs); applyFigs();
+  window.__isDark=isDark;
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches; window.__reduced=reduced;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const fmt=(v,f)=>f==='int'?Math.round(v).toLocaleString('en-US'):v.toFixed(+f);
+  const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;co.unobserve(e.target);const el=e.target,target=+el.dataset.count,f=el.dataset.format;
+    if(reduced){el.textContent=fmt(target,f);return}const t0=performance.now(),d=1400;(function tick(t){const p=Math.min(1,(t-t0)/d),k=1-Math.pow(1-p,3);el.textContent=fmt(target*k,f);if(p<1)requestAnimationFrame(tick)})(t0)}),{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+  // sticky steps
+  const steps=[...document.querySelectorAll('.step')];
+  const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){steps.forEach(s=>s.classList.toggle('active',s===e.target));document.dispatchEvent(new CustomEvent('xtal',{detail:+e.target.dataset.xtal}))}}),{rootMargin:'-45% 0px -45% 0px'});
+  steps.forEach(s=>so.observe(s));
+})();
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const D=window.CATHODEAI, reduced=window.__reduced;
+const viridis=t=>{const s=[[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];t=Math.max(0,Math.min(1,t))*(s.length-1);const i=Math.floor(t),f=t-i,a=s[i],b=s[Math.min(i+1,s.length-1)];return new THREE.Color(((a[0]+(b[0]-a[0])*f)/255),((a[1]+(b[1]-a[1])*f)/255),((a[2]+(b[2]-a[2])*f)/255))};
+const spriteTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.55,'rgba(255,255,255,.9)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);return t})();
+const textSprite=(txt,color)=>{const c=document.createElement('canvas');c.width=256;c.height=64;const g=c.getContext('2d');g.font='600 28px -apple-system,Segoe UI,Roboto,Helvetica,Arial';g.fillStyle=color;g.textAlign='center';g.fillText(txt,128,42);const m=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false});const s=new THREE.Sprite(m);s.scale.set(1.7,.42,1);return s};
+function makeRenderer(canvas){const r=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});r.setPixelRatio(Math.min(devicePixelRatio,2));return r}
+function fit(r,cam,el){const w=el.clientWidth,h=el.clientHeight;if(r.domElement.width!==w*r.getPixelRatio()||r.domElement.height!==h*r.getPixelRatio()){r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}}
+
+// ---------- hero: 787-material scatter ----------
+(function(){
+  const canvas=document.getElementById('heroCanvas'), heroEl=canvas.parentElement;
+  const renderer=makeRenderer(canvas), scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(42,2,.1,100);
+  cam.position.set(8.5,5.2,11.5); const ctr=new OrbitControls(cam,canvas); ctr.enableDamping=true; ctr.enableZoom=false; ctr.enablePan=false; ctr.autoRotate=!reduced; ctr.autoRotateSpeed=.6; ctr.target.set(0,1.3,0);
+  const M=D.materials, N=M.length, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  const sx=v=>Math.min(v,20)/20*6-3, sy=v=>Math.min(v*1000,300)/300*4, sz=v=>Math.min(v,5)/5*6-3;
+  for(let i=0;i<N;i++){const m=M[i];pos[3*i]=sx(m[1]);pos[3*i+1]=sy(m[2]);pos[3*i+2]=sz(m[3]);const c=viridis(m[4]);col[3*i]=c.r;col[3*i+1]=c.g;col[3*i+2]=c.b}
+  const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(pos,3)); geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.22,vertexColors:true,map:spriteTex,transparent:true,alphaTest:.1,depthWrite:false,sizeAttenuation:true});
+  const cloud=new THREE.Group(); const pts=new THREE.Points(geo,mat); cloud.add(pts); scene.add(cloud);
+  // axes box
+  const box=new THREE.Group(); const lineMat=new THREE.LineBasicMaterial({color:0x8b98a9,transparent:true,opacity:.45});
+  const bx=new THREE.BoxGeometry(6,4,6); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(bx),lineMat); edges.position.y=2; box.add(edges);
+  const dark=window.__isDark(); const lc=dark?'#e6edf3':'#0b1220';
+  const lab=(t,x,y,z)=>{const s=textSprite(t,lc);s.position.set(x,y,z);box.add(s);return s};
+  const labels=[lab('ΔV/V 0 → 20 %',0,-.35,3.4),lab('E_hull,charge 0 → 300 meV',-3.6,2,3.4),lab('band gap 0 → 5 eV',3.5,-.35,0)];
+  labels[1].material.rotation=Math.PI/2; cloud.add(box);
+  document.addEventListener('themechange',e=>{const c=e.detail.dark?'#e6edf3':'#0b1220';labels.forEach(s=>{box.remove(s);s.material.map.dispose();s.material.dispose()});labels.length=0;
+    const mk=(t,x,y,z)=>{const s=textSprite(t,c);s.position.set(x,y,z);box.add(s);return s};
+    labels.push(mk('ΔV/V 0 → 20 %',0,-.35,3.4),mk('E_hull,charge 0 → 300 meV',-3.6,2,3.4),mk('band gap 0 → 5 eV',3.5,-.35,0));labels[1].material.rotation=Math.PI/2});
+  // hover tooltip
+  const ray=new THREE.Raycaster(); ray.params.Points.threshold=.12; const mouse=new THREE.Vector2(-2,-2), tip=document.getElementById('tip'); let mx=0,my=0;
+  canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;mouse.set(mx/r.width*2-1,-(my/r.height)*2+1)});
+  canvas.addEventListener('pointerleave',()=>{mouse.set(-2,-2);tip.style.opacity=0});
+  let hover=-1, frame=0;
+  function tick(){fit(renderer,cam,heroEl);const wide=heroEl.clientWidth>820;cloud.position.set(wide?3.2:0,wide?.2:1.6,0);ctr.target.set(wide?.9:0,wide?1.5:2.9,0);ctr.update();
+    if(++frame%3===0&&mouse.x>-1.5){ray.setFromCamera(mouse,cam);const hit=ray.intersectObject(pts)[0];if(hit&&hit.index!==hover){hover=hit.index;const m=M[hover];tip.innerHTML=`<b>${m[0]}</b><br>ΔV/V ${m[1]} % · E<sub>hull,ch</sub> ${Math.round(m[2]*1000)} meV · E<sub>g</sub> ${m[3]} eV<br>DSI ${m[4].toFixed(2)} · class ${m[5]} · ${m[6].toLocaleString()} Wh/L`;tip.style.left=mx+'px';tip.style.top=my+'px';tip.style.opacity=1}else if(!hit){hover=-1;tip.style.opacity=0}else{tip.style.left=mx+'px';tip.style.top=my+'px'}}
+    renderer.render(scene,cam);requestAnimationFrame(tick)}
+  // scroll-driven: as the hero pins and the reader scrolls, tilt the camera and fade the cloud
+  const track=document.getElementById('top');
+  addEventListener('scroll',()=>{const p=Math.max(0,Math.min(1,scrollY/(track.offsetHeight-innerHeight)));mat.opacity=1-.6*p;cam.position.y=4.6+3*p;canvas.style.filter=`blur(${p*3}px)`},{passive:true});
+  tick();
+})();
+
+// ---------- sticky: LiCuO2 polymorph crystals ----------
+(function(){
+  const canvas=document.getElementById('xtalCanvas'), holder=canvas.parentElement, label=document.getElementById('xtalLabel');
+  const renderer=makeRenderer(canvas), scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(38,1,.1,200); cam.position.set(0,6,19);
+  const ctr=new OrbitControls(cam,canvas); ctr.enableDamping=true; ctr.enableZoom=false; ctr.enablePan=false; ctr.autoRotate=!reduced; ctr.autoRotateSpeed=1.1;
+  scene.add(new THREE.HemisphereLight(0xffffff,0x223355,1.2)); const dl=new THREE.DirectionalLight(0xffffff,1.6); dl.position.set(5,8,6); scene.add(dl);
+  const EL={Li:{c:0xb06cff,r:.55},Cu:{c:0xf59e0b,r:.62},O:{c:0xf87171,r:.48}}; const sph=new THREE.SphereGeometry(1,24,18); let group=null;
+  function build(S){ if(group){scene.remove(group);group.traverse(o=>{if(o.geometry&&o.geometry!==sph)o.geometry.dispose()})}
+    group=new THREE.Group(); const L=S.lattice, atoms=[]; const rep=S.sites.length<=4?[2,2,2]:[2,2,1];
+    for(let a=0;a<rep[0];a++)for(let b=0;b<rep[1];b++)for(let c=0;c<rep[2];c++)for(const s of S.sites){const f=[s.abc[0]+a,s.abc[1]+b,s.abc[2]+c];
+      const x=f[0]*L[0][0]+f[1]*L[1][0]+f[2]*L[2][0], y=f[0]*L[0][1]+f[1]*L[1][1]+f[2]*L[2][1], z=f[0]*L[0][2]+f[1]*L[1][2]+f[2]*L[2][2]; atoms.push({el:s.el,p:new THREE.Vector3(x,y,z)})}
+    const cen=atoms.reduce((v,a)=>v.add(a.p),new THREE.Vector3()).multiplyScalar(1/atoms.length); atoms.forEach(a=>a.p.sub(cen));
+    const byEl={}; atoms.forEach(a=>(byEl[a.el]=byEl[a.el]||[]).push(a));
+    for(const el in byEl){const inst=new THREE.InstancedMesh(sph,new THREE.MeshStandardMaterial({color:EL[el].c,roughness:.35,metalness:.1}),byEl[el].length);const m4=new THREE.Matrix4();byEl[el].forEach((a,i)=>{m4.makeScale(EL[el].r,EL[el].r,EL[el].r).setPosition(a.p);inst.setMatrixAt(i,m4)});group.add(inst)}
+    // bonds: Cu-O < 2.2 A, Li-O < 2.35 A
+    const segs=[]; for(let i=0;i<atoms.length;i++)for(let j=i+1;j<atoms.length;j++){const a=atoms[i],b=atoms[j];const pair=a.el+b.el;const cut=(pair==='CuO'||pair==='OCu')?2.2:(pair==='LiO'||pair==='OLi')?2.35:0;if(cut&&a.p.distanceTo(b.p)<cut){segs.push(a.p.x,a.p.y,a.p.z,b.p.x,b.p.y,b.p.z)}}
+    const bg=new THREE.BufferGeometry(); bg.setAttribute('position',new THREE.Float32BufferAttribute(segs,3)); group.add(new THREE.LineSegments(bg,new THREE.LineBasicMaterial({color:0x8b98a9,transparent:true,opacity:.7})));
+    // unit cell
+    const c=[[0,0,0],[1,0,0],[1,1,0],[0,1,0],[0,0,1],[1,0,1],[1,1,1],[0,1,1]].map(f=>new THREE.Vector3(f[0]*L[0][0]+f[1]*L[1][0]+f[2]*L[2][0],f[0]*L[0][1]+f[1]*L[1][1]+f[2]*L[2][1],f[0]*L[0][2]+f[1]*L[1][2]+f[2]*L[2][2]).sub(cen));
+    const e=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]]; const cg=new THREE.BufferGeometry().setFromPoints(e.flatMap(([i,j])=>[c[i],c[j]]));
+    group.add(new THREE.LineSegments(cg,new THREE.LineBasicMaterial({color:0x22d3ee,transparent:true,opacity:.9})));
+    scene.add(group); group.scale.setScalar(0.001); label.innerHTML=`<b>${S.sg}</b>${S.id} · E<sub>hull</sub> ${S.ehull_meV} meV/atom · DSI ${S.dsi} (class ${S.dsi_class})`; }
+  let target=1, cur=0.001; build(D.structures[0]);
+  document.addEventListener('xtal',e=>{build(D.structures[e.detail]);cur=reduced?1:.001});
+  function tick(){fit(renderer,cam,holder);ctr.update();if(group){cur+=(target-cur)*(reduced?1:.08);group.scale.setScalar(cur)}renderer.render(scene,cam);requestAnimationFrame(tick)} tick();
+})();
+</script>
+</body>
+</html>

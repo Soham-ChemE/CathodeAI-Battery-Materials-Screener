@@ -1,0 +1,130 @@
+"""Build every asset used by docs/index.html and the README hero from repo data.
+
+Inputs (all produced by ./reproduce.sh, which runs revision_code/ in order):
+  revision_code/df813_dsi.pkl              813 oxide entries with DSI (analysis_dsi.py)
+  revision_code/analysis_dsi_results.json  validation statistics (analysis_dsi.py)
+  revision_code/mpdata/summary_LiCuO2.json cached Materials Project LiCuO2 polymorph structures
+  revision_code/mpdata/electrodes_Li.json  cached electrode documents (funnel counts)
+
+Outputs:
+  docs/assets/data.js            window.CATHODEAI = {...} (classic script, works from file://)
+  docs/assets/fig_validation.svg DSI score vs representative experimental cycle life (11 cathodes)
+  docs/assets/fig_funnel.svg     eight-layer screening funnel
+  docs/assets/fig_polymorph.svg  LiCuO2 polymorph DSI inputs
+  docs/assets/social-preview.png 1280x640 social preview
+Run from the repository root:  python docs/build_assets.py
+"""
+import json, os, sys, math
+import numpy as np, pandas as pd
+import matplotlib; matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RC = os.path.join(ROOT, "revision_code"); OUT = os.path.join(ROOT, "docs", "assets")
+os.makedirs(OUT, exist_ok=True)
+
+df = pd.read_pickle(os.path.join(RC, "df813_dsi.pkl"))
+res = json.load(open(os.path.join(RC, "analysis_dsi_results.json")))
+val = res["val"]
+poly = json.load(open(os.path.join(RC, "mpdata", "summary_LiCuO2.json")))
+el = json.load(open(os.path.join(RC, "mpdata", "electrodes_Li.json")))
+
+# ---------------- funnel (same filters as repro_pipeline.py) ----------------
+n_all = len(el)
+cath = [e for e in el if all(e.get(k) is not None for k in ["average_voltage", "capacity_grav", "energy_vol", "stability_charge", "stability_discharge"])
+        and 2.5 <= e["average_voltage"] <= 5.0 and e["capacity_grav"] > 50 and e["energy_vol"] > 0]
+toxic = ["Pb", "Cd", "Hg", "As", "Tl", "Be"]; rare = ["Pt", "Ir", "Os", "Ru", "Rh", "Pd", "Au", "Re", "In", "Ge"]
+clean = [e for e in cath if not any(x in e["battery_formula"] for x in toxic + rare)]
+n_oxide = len(df); n_dsi = int(df["DSI"].notna().sum())
+funnel = [("Materials Project Li insertion electrodes", n_all), ("Voltage 2.5 to 5.0 V, capacity above 50 mAh/g", len(cath)),
+          ("Toxic and rare elements removed", len(clean)), ("Oxide frameworks", n_oxide), ("Band gap available: DSI assigned", n_dsi)]
+assert (n_all, len(cath), len(clean), n_oxide) == (2774, 1886, 1864, 813), (n_all, len(cath), len(clean), n_oxide)
+
+# ---------------- materials for the 3D scatter ----------------
+m = df[df["DSI"].notna()]
+materials = [[f, round(float(dv), 2), round(float(eh), 4), round(float(bg), 3), round(float(d), 3), c[0], round(float(ed)), round(float(v), 2)]
+             for f, dv, eh, bg, d, c, ed, v in zip(m["Formula"], m["Max Volume Change (%)"], m["Stability Charge (eV)"], m["Band Gap (eV)"],
+                                                    m["DSI"], m["DSI category"], m["Energy Density (Wh/L)"], m["Avg Voltage (V)"])]
+cat_counts = m["DSI category"].str[0].value_counts().to_dict()
+
+# ---------------- experimental validation set ----------------
+exp = {"LiCoO2": 500, "LiFePO4": 2000, "LiMnO2": 300, "NMC111": 1000, "NMC622": 800, "NMC811": 800, "NCA": 500, "LNMO": 1000, "LTO": 10000, "LFMP": 1500, "Li2MnO3": 200}
+validation = [{"name": k, "exp_cycles": exp[k], "dsi": round(val["scores"][k], 3), "cat": val["cats"][k][0]} for k in exp]
+binmap = {"A": 2200, "B": 1500, "C": 750, "D": 300}
+n_correct = sum((v["exp_cycles"] >= 500) == (binmap[v["cat"]] >= 500) for v in validation)
+
+# ---------------- LiCuO2 polymorph structures (the three electrode end-members) ----------------
+keep = {"C2/m": ("D", 46.6, 286, 0.09), "R-3m": ("C", 4.7, 164, 0.46), "Cm": ("B", 6.6, 25, 0.67)}
+structures = []
+for p in poly:
+    sg = p["symmetry"]["symbol"]
+    if sg not in keep: continue
+    s = p["structure"]
+    structures.append({"id": p["material_id"], "sg": sg, "ehull_meV": round(p["energy_above_hull"] * 1000, 1), "band_gap": p["band_gap"],
+                       "lattice": [[round(x, 4) for x in r] for r in s["lattice"]["matrix"]],
+                       "sites": [{"el": st["species"][0]["element"], "abc": [round(x, 4) for x in st["abc"]]} for st in s["sites"]],
+                       "dsi_class": keep[sg][0], "dv": keep[sg][1], "ehull_charge_meV": keep[sg][2], "dsi": keep[sg][3]})
+structures.sort(key=lambda s: ["C2/m", "R-3m", "Cm"].index(s["sg"]))
+
+data = {"funnel": funnel, "materials": materials, "cat_counts": cat_counts, "validation": validation, "n_correct": n_correct,
+        "stats": {"n_screened": n_all, "rho": round(val["rho_bins"], 2), "p": round(val["p_bins"], 3), "rho_single": round(val["rho_single"], 2),
+                  "rho_cont": round(val["rho_cont"], 2), "n_val": 11, "n_dsi": n_dsi, "n_oxide": n_oxide},
+        "structures": structures}
+with open(os.path.join(OUT, "data.js"), "w") as f:
+    f.write("// Generated by docs/build_assets.py from revision_code/ outputs. Do not edit by hand.\n")
+    f.write("window.CATHODEAI = " + json.dumps(data, separators=(",", ":")) + ";\n")
+print(f"data.js: {len(materials)} materials, {len(structures)} structures, rho={data['stats']['rho']}, {n_correct}/11 binary")
+
+# ---------------- figures ----------------
+DARK = "#0b1220"; ACC = "#22d3ee"; ACC2 = "#f59e0b"
+CAT = {"A": "#22d3ee", "B": "#34d399", "C": "#f59e0b", "D": "#f87171"}
+THEMES = {"dark": ("#e6edf3", "#8b98a9"), "light": ("#0b1220", "#5b6676")}
+INK, MUTED = THEMES["dark"]; THEME = "dark"
+def style(ax):
+    ax.set_facecolor("none")
+    for s in ax.spines.values(): s.set_color(MUTED); s.set_linewidth(0.8)
+    ax.tick_params(colors=INK, labelsize=9); ax.xaxis.label.set_color(INK); ax.yaxis.label.set_color(INK); ax.title.set_color(INK)
+    ax.grid(True, color=MUTED, alpha=0.2, lw=0.6)
+def save(fig, name): fig.savefig(os.path.join(OUT, name.replace(".svg", f"_{THEME}.svg")), transparent=True, bbox_inches="tight"); plt.close(fig); print("wrote", name, THEME)
+
+for THEME in THEMES:
+    INK, MUTED = THEMES[THEME]
+    fig, ax = plt.subplots(figsize=(6.4, 4.2)); style(ax)
+    for v in validation:
+        ax.scatter(v["exp_cycles"], v["dsi"], s=90, color=CAT[v["cat"]], edgecolor=INK, lw=0.6, zorder=3)
+        ax.annotate(v["name"], (v["exp_cycles"], v["dsi"]), textcoords="offset points", xytext=(6, 4), fontsize=8, color=INK)
+    ax.set_xscale("log"); ax.set_xlabel("Representative experimental cycle life (cycles)"); ax.set_ylabel("Degradation Screening Index")
+    ax.set_title(f"11 cathodes: Spearman rho = {val['rho_bins']:.2f}, p = {val['p_bins']:.3f}", fontsize=10)
+    ax.axhline(0.55, color=MUTED, ls="--", lw=0.8); ax.axvline(500, color=MUTED, ls="--", lw=0.8)
+    ax.text(205, 0.57, "class B or better", color=MUTED, fontsize=8); ax.text(520, 0.12, "500 cycles", color=MUTED, fontsize=8, rotation=90)
+    save(fig, "fig_validation.svg")
+
+    fig, ax = plt.subplots(figsize=(6.4, 3.6)); style(ax); ax.grid(False)
+    labels = [f[0] for f in funnel][::-1]; vals = [f[1] for f in funnel][::-1]
+    bars = ax.barh(labels, vals, color=[ACC2, ACC, ACC, ACC, MUTED], height=0.6)
+    for b, v in zip(bars, vals): ax.text(b.get_width() + 40, b.get_y() + b.get_height() / 2, f"{v:,}", va="center", color=INK, fontsize=9)
+    ax.set_xlim(0, 3300); ax.set_xlabel("Entries retained"); ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+    save(fig, "fig_funnel.svg")
+
+    fig, axs = plt.subplots(1, 3, figsize=(7.2, 3.0))
+    for ax, key, lab in zip(axs, ["dv", "ehull_charge_meV", "dsi"], ["Volume change on delithiation (%)", "E_hull of charged phase (meV/atom)", "DSI (higher is more durable)"]):
+        style(ax); ax.grid(False)
+        ax.bar([s["sg"] for s in structures], [s[key] for s in structures], color=[CAT[s["dsi_class"]] for s in structures], width=0.6)
+        for i, s in enumerate(structures): ax.text(i, s[key], f"{s[key]:g}", ha="center", va="bottom", color=INK, fontsize=8)
+        ax.set_title(lab, fontsize=8); ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
+    fig.tight_layout(); save(fig, "fig_polymorph.svg")
+
+# social preview 1280x640
+fig = plt.figure(figsize=(12.8, 6.4), dpi=100); fig.patch.set_facecolor(DARK)
+ax = fig.add_axes([0.52, 0.12, 0.45, 0.78], projection="3d"); ax.set_facecolor(DARK)
+rng = np.random.default_rng(0); idx = rng.choice(len(materials), 500, replace=False)
+xs = np.array([materials[i][1] for i in idx]); ys = np.array([materials[i][2] for i in idx]) * 1000; zs = np.array([materials[i][3] for i in idx]); cs = np.array([materials[i][4] for i in idx])
+ax.scatter(np.clip(xs, 0, 20), np.clip(ys, 0, 300), zs, c=cs, cmap="viridis", s=14, alpha=0.9, depthshade=True)
+ax.set_xlabel("dV/V (%)", color=MUTED); ax.set_ylabel("E_hull,charge (meV)", color=MUTED); ax.set_zlabel("Band gap (eV)", color=MUTED)
+ax.xaxis.pane.fill = ax.yaxis.pane.fill = ax.zaxis.pane.fill = False; ax.tick_params(colors=MUTED, labelsize=7)
+for a in (ax.xaxis, ax.yaxis, ax.zaxis): a.pane.set_edgecolor("#1f2a3c"); a._axinfo["grid"]["color"] = "#1f2a3c"
+fig.text(0.05, 0.72, "CathodeAI", color=INK, fontsize=44, fontweight="bold")
+fig.text(0.05, 0.60, "Structure-aware degradation screening\nof 2,774 Li-ion cathodes", color=INK, fontsize=20, va="top")
+fig.text(0.05, 0.34, f"Spearman rho {val['rho_bins']:.2f} on 11 experimental cathodes\n{n_correct} of 11 on the right side of the durable split\nMaterials Project data, every number reproducible", color=ACC, fontsize=14, va="top")
+fig.text(0.05, 0.10, "Soham Kavathekar  |  github.com/Soham-ChemE", color=MUTED, fontsize=12)
+fig.savefig(os.path.join(OUT, "social-preview.png"), dpi=100, facecolor=DARK); plt.close(fig); print("wrote social-preview.png")
